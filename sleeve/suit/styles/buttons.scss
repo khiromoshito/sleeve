@@ -1,0 +1,81 @@
+@values {
+    colorPrimary: ${Theme.get('colorPrimary')};
+    colorPrimary1: ${Theme.get('colorPrimary', 0)};
+    colorPrimary2: ${Theme.get('colorPrimary', 1)};
+    colorPrimary3: ${Theme.get('colorPrimary', 2)};
+
+    colorAccent: ${Theme.get('colorAccent')};
+
+    colorText: ${Theme.get('colorText')};
+
+    fontFamily: ${Theme.getAll('fontFamily').join(', ')};
+    fontSizeBody: ${Theme.getR('font-size', 0)}px;
+
+    fontSizeButton: ${Theme.get('fontSize')*0.9}px;
+
+    btnPaddingV: ${5*Theme.scale}px;
+    btnPaddingH: ${15*Theme.scale}px;
+};;
+
+
+
+.su-style-classic button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+
+    margin: ${2.5*Theme.scale}px;
+
+    border: none;
+
+    font-size: $fontSizeButton;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.87);
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+
+
+
+    padding: $btnPaddingV $btnPaddingH;
+};;
+
+button:hover, .su-btn:hover {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.07);
+};;
+
+
+button:active, .su-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+    box-shadow: none;
+};;
+
+
+.su-btn-ghost, .su-btn-ghost-sharp, .su-btn-ghost-round {
+    color: $colorPrimary;
+    border: 2px solid $colorPrimary;
+    font-size: $fontSizeBody;
+    background-color: transparent;
+    font-weight: bold;
+};;
+
+.su-btn-ghost:hover, .su-btn-ghost-sharp:hover, .su-btn-ghost-round:hover {
+    color: white;
+    border: 2px solid $colorPrimary;
+    background-color: $colorPrimary;
+};;
+
+
+
+.su-btn-ghost-round {
+    border-radius: 4px;
+};;
+
+

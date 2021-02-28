@@ -1,0 +1,62 @@
+
+@values {
+    colorPrimary: ${Theme.get('colorPrimary')};
+    colorPrimary1: ${Theme.get('colorPrimary', 0)};
+    colorPrimary2: ${Theme.get('colorPrimary', 1)};
+    colorPrimary3: ${Theme.get('colorPrimary', 2)};
+
+    colorAccent: ${Theme.get('colorAccent')};
+
+    colorText: ${Theme.get('colorText')};
+
+    fontFamily: ${Theme.getAll('fontFamily').join(', ')};
+    fontSizeBody: ${Theme.getR('font-size', 0)}px;
+
+    fontSizeButton: ${Theme.get('fontSize')*0.9}px;
+
+    btnPaddingV: ${5*Theme.scale}px;
+    btnPaddingH: ${15*Theme.scale}px;
+};;
+
+
+.su-tab-pages > *:not([tab-selected]) {
+    display: none;
+};;
+
+
+.su-style-classic .su-tab-buttons > * {
+    background-color: transparent;
+    padding: 8px 14px;
+    box-shadow: none;
+    margin: 0;
+    opacity: 0.5;
+
+    border-radius: 2px 2px 0 0;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 90%;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+};;
+
+
+.su-style-classic .su-tab-buttons > [tab-selected] {
+
+    background-color: rgba(0, 0, 0, 0.03);
+    opacity: 1;
+};;
+
+
+.su-style-classic .su-tab-pages>* {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 15px;
+    overflow-x: auto;
+};;
+
