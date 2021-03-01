@@ -1,5 +1,10 @@
 
-
+function R(mobile, tablet, desktop) {
+    return Theme.evaluateResponsiveValue(
+        {mobile: mobile,
+        tablet: tablet,
+        desktop: desktop});
+}
 
 var Suit = {
 
@@ -62,7 +67,6 @@ var Suit = {
         Suit.showPage();
         Suit.fixBlockCodes();
 
-        //alert("DFDSFSDFDFSDSDFDSFSD");
         if(document.onsuitload) document.onsuitload();
         // console.log("loadListener: ", document.onsuitload);
         // console.log("self: ", document);
@@ -97,9 +101,19 @@ var Suit = {
                 
         
         }],
+        ["vspace",           "div",      "su-space",      null,     (el)=>{
+            console.log(el);
+            let thickness = el.getAttribute("thickness") || 0;
+            el.style.height = Number(thickness) ? thickness + "px" : thickness;
+            el.removeAttribute("thickness");
+        }],
         ["navbar",           "div",      "su-navbar"],
+        ["main",             "div",      "su-main"],
         ["sidebar",          "div",      "su-sidebar"],
         
+        ["blockbtn",         "button",      "su-btn-block"],
+
+
         ["dropdown",         "div",      "su-dropdown"],
         ["dropdown-button",  "div",      "su-dropdown-btn",   ["onclick", "dropdown(this)"]],
         ["dropdown-items",   "div",      "su-dropdown-items"],
@@ -144,6 +158,9 @@ var Suit = {
             semantic_elements.forEach(el=>{
                 let new_element = document.createElement(model_tagName);
 
+
+                if(semantic[4]) semantic[4](el);
+
                 let final_class = model_class;
                 
                 if(el.hasAttribute("type")) {
@@ -151,6 +168,7 @@ var Suit = {
                 }
                 
                 Array.prototype.slice.call(el.attributes).forEach(attr=>{
+                    console.log(attr.name);
                     if(attr.name=="class")
                         new_element.setAttribute("class", attr.value + " " + final_class);
                     else 
@@ -163,7 +181,6 @@ var Suit = {
                 if(optional_attr && !new_element.hasAttribute(optional_attr[0]))
                     new_element.setAttribute(optional_attr[0], optional_attr[1]);
 
-                if(semantic[4]) semantic[4](el);
 
 
                 el.removeAttribute("type");
@@ -257,7 +274,6 @@ var Suit = {
     },
 
     fixBlockCodes: () => {
-        console.log("Fixing block codes");
         document.querySelectorAll(".su-code-block").forEach(el=>{
             let parent = el.parentElement;
             let parent_style = window.getComputedStyle(parent, null);
@@ -313,9 +329,6 @@ var Suit = {
         });
     },
 
-
-
-
     showPage: () => {
 
         let sheets = document.styleSheets;
@@ -325,7 +338,7 @@ var Suit = {
             for (let j = 0; j < classes.length; j++) {
                 if(classes[j]) {
                     if (classes[j].selectorText=="body, .doNotModifyThis") {
-                        classes[j].style.cssText = "display: initial";
+                        classes[j].style.cssText = "display: block";
                     }         
                 }
             }
@@ -696,33 +709,35 @@ var Theme = {
         else throw("Invalid responive value format.\nArgument must have values for name, mobile, tablet and desktop");
     },
 
+    evaluateResponsiveValue: (responsive_args) => {
+        let current_value;
+
+        switch(Theme.device) {
+            case Device.mobile:
+                current_value = responsive_args.mobile;
+            break;
+            case Device.tablet:
+                current_value = responsive_args.tablet;
+            break;
+            case Device.desktop:
+                current_value = responsive_args.desktop;
+            break;
+        }
+
+        let is_scaling = responsive_args.scaling===undefined ? 
+            true : responsive_args.scaling;
+
+        if(typeof(current_value)=="number") {
+            if(is_scaling) current_value *= Theme.scale;
+        }
+
+        return current_value;
+    },
+
     getR: (name) => {
-        if(Theme.responsive_values[name]) {
-            let current_value;
-            let responsive_args = Theme.responsive_values[name];
-
-            switch(Theme.device) {
-                case Device.mobile:
-                    current_value = responsive_args.mobile;
-                break;
-                case Device.tablet:
-                    current_value = responsive_args.tablet;
-                break;
-                case Device.desktop:
-                    current_value = responsive_args.desktop;
-                break;
-            }
-
-            let is_scaling = responsive_args.scaling===undefined ? 
-                true : responsive_args.scaling;
-
-            if(typeof(current_value)=="number") {
-                if(is_scaling) current_value *= Theme.scale;
-            }
-            return current_value;
-
-
-        } else throw("Responsive value '" + name +"' was not found");
+        if(Theme.responsive_values[name]) 
+            return Theme.evaluateResponsiveValue(Theme.responsive_values[name]);
+        else throw("Responsive value '" + name +"' was not found");
     }
 
 
@@ -740,7 +755,14 @@ window.addEventListener("resize", ()=>{
 
 
 window.addEventListener("DOMContentLoaded", function(){
-    Suit.initialise();
+    if(window.hasSleeve) {
+        console.log("HAS SLEEVE");
+        if(Sleeve.isPrepared) 
+            Suit.initialise();
+        else Sleeve.onPrepared = ()=> Suit.initialise();
+    } else {
+        Suit.initialise();
+    }
 
 });
 
