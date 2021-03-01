@@ -107,6 +107,9 @@ var Suit = {
             el.style.height = Number(thickness) ? thickness + "px" : thickness;
             el.removeAttribute("thickness");
         }],
+
+
+        ["scaffold",         "div",      "su-body"],
         ["navbar",           "div",      "su-navbar"],
         ["main",             "div",      "su-main"],
         ["sidebar",          "div",      "su-sidebar"],
