@@ -13,11 +13,13 @@
 
     fontSizeButton: ${Theme.get('fontSize')*0.9}px;
 
-    btnPaddingV: ${5*Theme.scale}px;
-    btnPaddingH: ${15*Theme.scale}px;
+    btnPaddingV: 0.7em;
+    btnPaddingH: 1em;
 };;
 
-
+button {
+    box-sizing: border-box; 
+};;
 
 .su-style-classic button {
     -webkit-touch-callout: none;
@@ -78,4 +80,10 @@ button:active, .su-btn:active {
     border-radius: 4px;
 };;
 
+
+.su-btn-block {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 500px;
+}
 

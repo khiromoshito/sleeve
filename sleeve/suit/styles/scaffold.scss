@@ -26,11 +26,15 @@
 
     sidebarHeight: ${document.documentElement.clientHeight - Theme.getR('nav-height')};
     sidebarTWidth: ${300+(2*20)}px;
+
+    bodyHeight: ${document.documentElement.clientHeight - Theme.getR('nav-height')};
 };;
 
+body {
+    background-color: #fcfcfc;
+};;
 
 .su-body {
-    background-color: #fcfcfc;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
