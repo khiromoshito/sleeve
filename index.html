@@ -6,6 +6,7 @@
 <suit-style src="sleeve/suit/styles/buttons.scss"></suit-style>
 
 <link rel="stylesheet" href="sleeve/suit/suit.css">
+<link rel="icon" href="/favicon.png">
 
 <style>
     body {
@@ -16,7 +17,8 @@
 
     h4 {
         text-align: center;
-        margin-bottom: 25px;
+        margin-top: 0;
+        margin-bottom: 15px;
     }
 
     .subheader {
@@ -35,11 +37,13 @@
     
     <div class="su-body">
         <main>
+            <img src="favicon.png" height="150px">
+            <vspace thickness="10px"></vspace>
             <h4>BUILD SCALABLE RESPONSIVE WEB APPS, EASILY.</h4>
             <p class="subheader">
                 Sleeve maintains the classic HTML DOM while delivering flexible web applications, in least boilerplate.
             </p>
-            <vspace thickness="70px"></vspace>
+            <vspace thickness="30px"></vspace>
             <div style="margin: 0 15px;">
                 <a href="docs/docs.html" page-routing>
                     <button responsive style="color: white; background-color: darkmagenta; width: {{ R('100%', '40%', '200px'); }}">
