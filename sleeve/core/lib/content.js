@@ -228,15 +228,23 @@ var PageRoute = {
         
     },
 
-    toPageRoute: (url, callback = () => {}) => {
+    toPageRoute: (url, callback = () => {}, thenState = () => {}) => {
         PageRoute.onRoutingStart(url);
         PageRoute.onRoutingProgress(url, 0.1);
-        fetch(url).
-        then(res=>res.text()
-        .then(res=>{
+        
+        let route_data = null;
+
+        let processRoute = () => {
 
             let temp_page = document.createElement("html");
-            temp_page.innerHTML = res;
+            temp_page.innerHTML = route_data;
+
+
+            if(history.state)
+                history.replaceState({...history.state, route_data: route_data, route_src: url}, "");
+            else
+            history.replaceState({route_data: route_data, route_src: url}, "");
+
 
 
             
@@ -273,14 +281,41 @@ var PageRoute = {
                 });
             });
 
-        }).catch(e=>{
-            console.log("Error loading page: " + e);
-            PageRoute.onRoutingError(url, e);
-        }))
-        .catch(e=>{
-            console.log("Error processing page: " + e);
-            PageRoute.onRoutingError(url, e);
-        });
+        };
+
+        let preloaded = PageRoute._preloaded_routes[url];
+        if(preloaded) {
+            if(preloaded==404) {
+                location.href = url;
+            } else if(preloaded[0]) {
+                route_data = preloaded[1];
+                thenState();
+                processRoute();
+            } else {
+                PageRoute._preloading_callbacks[url]
+                    = function(res){
+                        route_data = res;
+                        thenState();
+                        processRoute();
+                    };
+            }
+        } else {
+            fetch(url).
+            then(res=>res.text()
+            .then(res=>{
+                route_data = res;
+                processRoute();
+            }).catch(e=>{
+                console.log("Error loading page: " + e);
+                PageRoute.onRoutingError(url, e);
+            }))
+            .catch(e=>{
+                console.log("Error processing page: " + e);
+                PageRoute.onRoutingError(url, e);
+            });
+        }
+
+
     },
 
     _preloaded_routes: {},
