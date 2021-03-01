@@ -67,7 +67,7 @@ var Sleeve = {
         for(let el of snippet_elements) {
             if(el.hasAttribute("src")) {
                 let snippet_src = el.getAttribute("src");
-                let content = SleeveAPI.fetchText(snippet_src, () => {
+                let content = SleeveAPI.fetchText(snippet_src, (content) => {
 
                     let content_node = SleeveDOM.wrapAll(SleeveDOM.stringToNodeList(content));
 
@@ -85,12 +85,13 @@ var Sleeve = {
                         picked_nodes.forEach(pn=>content_node.appendChild(pn));
                     }
 
+
                 
                 
                 
                 
                     el.innerHTML = content_node.innerHTML;
-                    this.loadSnippets(el, ()=>{
+                    Sleeve.loadSnippets(el, ()=>{
                         Sleeve.cleanSnippets(root);
                         finished();
                     });
@@ -364,6 +365,15 @@ var SleeveUtils = {
     toArray: (nodelist) => Array.prototype.slice.call(nodelist)
 }
 
+var SleeveAPI = {
+    fetchText: (url, callback) => {
+        fetch(url).then(res=>res.text().then(res=>{
+            callback(res);
+            console.log(res);
+        }));
+    }
+
+}
 
 
 /** This holds a value, that when changed, 
