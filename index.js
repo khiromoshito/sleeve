@@ -6,6 +6,7 @@ const app = express();
 
 app.use("/sleeve", express.static(__dirname + "/sleeve"));
 app.use("/docs", express.static(__dirname + "/docs"));
+app.use("/frags", express.static(__dirname + "/frags"));
 
 app.listen(5000, ()=>console.log("We're now on the run, captain; at port 5000"));
 app.get("/", (req, res)=>{
