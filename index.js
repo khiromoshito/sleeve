@@ -4,7 +4,8 @@ const path = require('path');
 const app = express();
 
 
-app.use(express.static(__dirname));
+app.use("/sleeve", express.static(__dirname + "/sleeve"));
+app.use("/docs", express.static(__dirname + "/docs"));
 
 app.listen(5000, ()=>console.log("We're now on the run, captain; at port 5000"));
 app.get("/", (req, res)=>{
