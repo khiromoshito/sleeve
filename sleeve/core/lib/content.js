@@ -558,35 +558,63 @@ window.onpopstate = (event) => {
             PageRoute.toPageRoute(location.href);
     }
 }
-document.onclick = (event) => {
-    let element = event.target || e.srcElement;
-
-    if(element.hasAttribute("href")) {
-        let route_url = element.getAttribute("href");
-
-        if(element.hasAttribute("content-routing")) {
-            PageRoute.toContentRoute(route_url, ()=>{}, ()=>{
-                PageRoute._current_route_mode = "content";
-                history.replaceState({route_mode: "content"}, "");
-
-                history.pushState({route_mode: "content"}, "", route_url);
-            });
-            
-            return false;
-        } else if(element.hasAttribute("page-routing")) {
-            PageRoute._current_route_mode = "page";
-            history.replaceState({route_mode: "page"}, "");
 
 
-            history.pushState({route_mode: "page"}, "", route_url);
-            PageRoute.toPageRoute(route_url);
-            return false;
-        }
+
+function configureClicks(element) {
+    let route_url = element.getAttribute("href");
+
+    if(element.hasAttribute("content-routing")) {
+        PageRoute.toContentRoute(route_url, ()=>{}, ()=>{
+            PageRoute._current_route_mode = "content";
+            history.replaceState({route_mode: "content"}, "");
+
+            history.pushState({route_mode: "content"}, "", route_url);
+        });
+        
+        return false;
+    } else if(element.hasAttribute("page-routing")) {
+        PageRoute._current_route_mode = "page";
+        history.replaceState({route_mode: "page"}, "");
+
+
+        history.pushState({route_mode: "page"}, "", route_url);
+        PageRoute.toPageRoute(route_url);
+        return false;
     }
-    
 
-
+    return true;
 }
+
+// document.onclick = (event) => {
+//     let element = event.target || e.srcElement;
+//     if(element.hasAttribute("href")) {
+//         return configureClicks(element);
+//     }
+// };
+
+
+window.addEventListener("DOMContentLoaded", ()=>{
+
+    document.querySelectorAll("a[href]").forEach(el=>{
+        el.onclick = () => {
+            return configureClicks(el);
+        };
+    });
+});
+
+window.addEventListener("DOMNodeInserted", () => {
+    document.querySelectorAll("a[href]").forEach(el=>{
+        el.onclick = () => {
+            return configureClicks(el);
+        };
+    });
+});
+
+// Element.prototype.onclick = () => {
+//     alert("HAHA");
+//     return false;
+// }
 // }
 
 
@@ -596,9 +624,7 @@ window.hasContentHandler = true;
 window.hasSleeveContent = true;
 history.scrollRestoration = "manual";
 
-let _existing_onsuitload = document.onsuitload || function(){};
 document.onsuitload = () => {
-    _existing_onsuitload();
     setTimeout(PageRoute.preloadRoutes, 100);
 }
 
