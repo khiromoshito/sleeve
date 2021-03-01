@@ -111,6 +111,17 @@ var Suit = {
 
         ["scaffold",         "div",      "su-body"],
         ["navbar",           "div",      "su-navbar"],
+        ["nav-left",         "div",      "su-navbar-left"],
+        ["nav-center",       "div",      "su-navbar-center"],
+        ["nav-right",        "div",      "su-navbar-right"],
+        ["nav-links",        "div",      "su-navbar-links", null, (el)=>{
+            let gaps = el.getAttribute("gaps") || "0px";
+            let links = Array.prototype.slice.call(el.children);
+            links.shift();
+            links.forEach(l=>l.style.marginLeft = gaps);
+
+            el.removeAttribute("gaps");
+        }],
         ["main",             "div",      "su-main"],
         ["sidebar",          "div",      "su-sidebar"],
         
@@ -186,7 +197,7 @@ var Suit = {
 
 
 
-                el.removeAttribute("type");
+                new_element.removeAttribute("type");
                 
                 new_element.innerHTML = el.innerHTML;
 
@@ -272,8 +283,18 @@ var Suit = {
         Suit._suitstyles.forEach(suitstyle=>suitstyle.parse());   
         Suit._responsive_elements.forEach(responsive=>responsive.parse());   
 
+        Suit.updateScreenElements();
+
         Suit.fixBlockCodes();
         //Suit._inline_styled_elements.forEach(inline=>inline.parseStyle());   
+    },
+
+    updateScreenElements: () => {
+        document.querySelectorAll("[screens]").forEach(el=>{
+            let screens = el.getAttribute("screens").split(",").map(s=>s.toLowerCase().trim());
+            el.style.display = (screens.includes(Device.stringOf(Theme.device))) ? 
+                "initial" : "none";
+        });
     },
 
     fixBlockCodes: () => {
@@ -584,7 +605,20 @@ function ThemeValues(colors = {}, font = {}) {
 var Device = {
     mobile: 1,
     tablet: 2,
-    desktop: 3
+    desktop: 3,
+
+    stringOf: (device_id) => {
+        switch(device_id) {
+            case Device.mobile:
+                return "mobile";
+            case Device.tablet:
+                return "tablet";
+            case Device.desktop:
+                return "desktop";
+            default:
+                return "unknown";
+        }
+    }
 }
 
 var Theme = {

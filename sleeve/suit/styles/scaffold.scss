@@ -68,20 +68,61 @@ body {
 ${Theme.getR('show-sidebar')?".su-sidebar-sticky + .su-main {margin-left: $sidebarWidth;\};;":""}
 
 .su-navbar, .su-navbar-pinned {
-    background-color: #fff;
+    box-sizing: border-box;
     
     width: 100%;
     height: $navHeight;
 
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
     
     position: absolute;
     top: 0;
     left: 0;
 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+};;
+
+.su-style-classic .su-navbar, .su-style-classic .su-navbar-pinned  {
+    padding: 0 50px;
+
+    background-color: #fff;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 };;
 
 .su-navbar-pinned {
     position: fixed;
     z-index: 1000;
+};;
+
+
+
+
+.su-navbar-left, .su-navbar-center, .su-navbar-right {
+};;
+
+.su-navbar-left {
+    text-align: left;
+};;
+
+.su-navbar-center {
+    text-align: center;
+};;
+
+.su-navbar-right {
+    text-align: right;
+};;
+
+.su-navbar-links {
+    display: inline-block;
+};;
+
+.su-navbar-links>* {
+    float: left;
+};;
+
+.su-style-classic .su-navbar-links>a {
+    font-weight: bold;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.7);
 }
