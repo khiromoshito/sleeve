@@ -33,17 +33,18 @@
 
 
 <body class="su-style-classic">
-    <snippet src="frags/navbar.html"></snippet>
+    <snippet src="frags/navbar.html" value-favicon-url="../favicon_gray.png"></snippet>
     
-    <div class="su-body">
+    <scaffold>
         <main>
-            <img src="favicon.png" height="150px">
-            <vspace thickness="10px"></vspace>
+            <img responsive src="favicon.png" height="150px" 
+                style="height: {{ R('150', '200', '250') }}px; margin-bottom: {{ R('10', '20', '50') }}px">
+            
             <h4>BUILD SCALABLE RESPONSIVE WEB APPS, EASILY.</h4>
             <p class="subheader">
                 Sleeve maintains the classic HTML DOM while delivering flexible web applications, in least boilerplate.
             </p>
-            <vspace thickness="30px"></vspace>
+            <vspace responsive thickness="{{R(30, 35, 40)}}px"></vspace>
             <div style="margin: 0 15px;">
                 <a href="docs/docs.html" page-routing>
                     <button responsive style="color: white; background-color: darkmagenta; width: {{ R('100%', '40%', '200px'); }}">
@@ -53,7 +54,7 @@
                 <button responsive style="width: {{ R('100%; margin-top: 10px', '40%', '200px'); }}">SEE DEMOS</button>
             </div>
         </main>
-    </div>
+    </scaffold>
 </body>
 
 
