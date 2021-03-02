@@ -861,13 +861,51 @@ function sidebar(element) {
 
 
     let visible = sidebar.hasAttribute("visible");
-    if(!visible) {
-        sidebar.style.display = "block";
-        sidebar.setAttributeNode(document.createAttribute("visible"));
-    } else {
-        sidebar.style.display = "none";
-        sidebar.removeAttribute("visible");
+    
+    let toggleVisibility = () => {
+        if(!visible) {
+            sidebar.style.display = "block";
+            sidebar.setAttributeNode(document.createAttribute("visible"));
+        } else {
+            sidebar.style.display = "none";
+            sidebar.removeAttribute("visible");
+        }
     }
+
+    if(sidebar.hasAttribute("transition")) {
+        let is_left = true;
+        if(sidebar.previousElementSibling.hasClass("su-main")) is_left = false;
+
+        let from;
+        let to;
+
+        switch(sidebar.getAttribute("transition")) {
+            case "slide":
+                sidebar.style.display = "block";
+                from = {position: "fixed", left: is_left ? "-100%" : "100%"};
+                to = {position: "fixed", left: "0px"};
+
+                sidebar.animate(!visible ? [from, to] : [to, from], {duration: 120, easing: "ease"})
+                    .onfinish = () => toggleVisibility();
+            break; 
+            case "fade":
+                sidebar.style.display = "block";
+                sidebar.style.position = "fixed";
+
+                from = {opacity: "0"};
+                to = {opacity: "1"};
+
+                sidebar.animate(!visible ? [from, to] : [to, from], {duration: 120, easing: "ease"})
+                    .onfinish = () => toggleVisibility();
+            break; 
+            default:
+                toggleVisibility();
+        }
+    } else toggleVisibility();
+
+
+    
+    
 }
 
 
