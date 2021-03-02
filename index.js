@@ -20,3 +20,8 @@ app.get("/favicon.png", (req, res)=>{
     //res.send(__dirname);
 });
 
+app.get("/favicon_gray.png", (req, res)=>{
+    res.sendFile(path.join(__dirname, "favicon_gray.png"));
+    //res.send(__dirname);
+});
+
