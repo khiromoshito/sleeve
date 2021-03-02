@@ -25,11 +25,9 @@ var Suit = {
 
         Theme.updateScale(false);
 
-        Suit.loadSemantics();
-        
-        
-        Suit.loadResponsiveElements();
 
+        Suit.loadResponsiveElements();
+        Suit.loadSemantics();
 
         Suit.loadSuitStyles();
         //Suit.loadInlineStyles();
@@ -64,8 +62,11 @@ var Suit = {
 
     concludeInit: () => {
 
-        Suit.showPage();
+
+        Suit.updateStyles();
         Suit.fixBlockCodes();
+        IconsLoader.loadIconDependencies();
+        Suit.showPage();
 
         if(document.onsuitload) document.onsuitload();
         // console.log("loadListener: ", document.onsuitload);
@@ -110,7 +111,17 @@ var Suit = {
 
 
         ["scaffold",         "div",      "su-body"],
-        ["navbar",           "div",      "su-navbar"],
+        ["navbar",           "div",      "su-navbar", null, (el)=>{
+            let height_string = el.getAttribute("height").trim() || "50px";
+            let height_num = parseFloat(height_string);
+            
+            if(height_string.endsWith("%")) {
+                height_num = (height_num/100)*document.documentElement.clientHeight;
+            }
+
+            Theme.sizes.navbar = height_num;
+            el.removeAttribute("height");
+        }],
         ["nav-left",         "div",      "su-navbar-left"],
         ["nav-center",       "div",      "su-navbar-center"],
         ["nav-right",        "div",      "su-navbar-right"],
@@ -123,7 +134,17 @@ var Suit = {
             el.removeAttribute("gaps");
         }],
         ["main",             "div",      "su-main"],
-        ["sidebar",          "div",      "su-sidebar"],
+        ["sidebar",          "div",      "su-sidebar", null, (el)=>{
+            let width_string = el.getAttribute("width").trim() || "300px";
+            let width_num = parseFloat(width_string);
+            
+            if(width_string.endsWith("%")) {
+                width_num = (width_num/100)*document.documentElement.clientWidth;
+            }
+
+            Theme.sizes.sidebar = width_num;
+            el.removeAttribute("width");
+        }],
         
         ["blockbtn",         "button",      "su-btn-block"],
 
@@ -159,7 +180,8 @@ var Suit = {
     ],
 
 
-    loadSemantics: () => {
+    loadSemantics: (root = document) => {
+        console.time("Semantics parse time");
         Suit._semantics.forEach(semantic => {
 
             let tagName = semantic[0];
@@ -167,7 +189,7 @@ var Suit = {
             let model_class = semantic[2];
             let optional_attr = semantic[3];
 
-            let semantic_elements = document.querySelectorAll(tagName);
+            let semantic_elements = root.querySelectorAll(tagName);
 
             semantic_elements.forEach(el=>{
                 let new_element = document.createElement(model_tagName);
@@ -178,7 +200,7 @@ var Suit = {
                 let final_class = model_class;
                 
                 if(el.hasAttribute("type")) {
-                    final_class += "-" + el.getAttribute("type");
+                    final_class += " " + final_class + "-" + el.getAttribute("type");
                 }
                 
                 Array.prototype.slice.call(el.attributes).forEach(attr=>{
@@ -204,6 +226,8 @@ var Suit = {
                 el.parentElement.replaceChild(new_element, el);
             });
         });
+
+        console.timeEnd("Semantics parse time");
     },
 
     loadSuitStyles: () => {
@@ -254,7 +278,6 @@ var Suit = {
         responsive_elements.forEach(el=>{
             let responsive_element = new ResponsiveElement(el);
             Suit._responsive_elements.push(responsive_element);
-            responsive_element.parse();
         });
     },
 
@@ -324,32 +347,8 @@ var Suit = {
 
             let el_offset = el_margin + el_border + el_padding;
 
-            //console.log({parent_space, el_offset, parent_offset});
-
 
             el.style.width = document.documentElement.clientWidth - (parent_bounds + el_offset);
-
-            // let el_style = window.getComputedStyle(el, null);
-            // let el_width = el.offsetWidth;
-            // let el_offset =  document.documentElement.scrollWidth - el_width;
-            
-            // console.log({el_style, el_width, el_offset});
-
-            // el.style.width = (document.documentElement.clientWidth - el_offset) + "px";
-
-            // // if(width>window.innerWidth) {
-            // //     let parent_style = window.getComputedStyle(parent, null);
-            // //     let padding_left = parseFloat(parent_style.getPropertyValue("padding-left"));
-            // //     let padding_right = parseFloat(parent_style.getPropertyValue("padding-right"));
-                
-            // //     let offset = padding_left + padding_right;
-
-            // //     width = window.innerWidth - offset;
-                
-            // // }
-            // console.log("width: " + width);
-            // console.log("padding")
-            //el.style.width = width;
         });
     },
 
@@ -412,7 +411,7 @@ function SuitStyle(content) {
         
 
         //Remove comments
-        style_content = style_content.replace(/\/\*([^\*]|\*(?!\/))*\//g, "");
+        style_content = style_content.replace(/\/\*([^\*]|\*(?!\/))*\*\//g, "");
         
         
         // Evaluating global variables
@@ -472,7 +471,7 @@ function SuitStyle(content) {
 
         //console.log("Rules: ", rules);
 
-        let node_id = `suitestyle-${this.id}`;
+        let node_id = `suitstyle-${this.id}`;
 
         let anchor_node = document.querySelector(`[id='${node_id}']`);
         
@@ -533,11 +532,16 @@ function ResponsiveElement(element) {
         }
 
         let node_string = SuitUtils.nodeToString(this.reference_element);
-        node_string = node_string.replace(/\{\{([^\}]|(?<!\})\})*\}\}/, m=> {
+        node_string = node_string.replace(/\{\{([^\}]|(?<!\})\})*\}\}/g, m=> {
             return eval(m.slice(2,-2));
         });
 
-        let new_node = SuitUtils.stringToNode(node_string);
+        let new_node_parent = document.createElement("html");
+        new_node_parent.appendChild(SuitUtils.stringToNode(node_string));
+        Suit.loadSemantics(new_node_parent);
+
+        let new_node = new_node_parent.firstElementChild;
+
         this.target_element.parentElement.replaceChild(new_node, this.target_element);
 
         this.target_element = new_node;
@@ -602,6 +606,40 @@ function ThemeValues(colors = {}, font = {}) {
 }
 
 
+
+var IconsLoader = {
+    loadIconDependencies: () => {
+        let dropdown_arrows = document.querySelectorAll(".su-dropdown-icon-arrow");
+        let menu_toggle_buttons = document.querySelectorAll(".su-sidebar-togglebtn");
+
+        dropdown_arrows.forEach(el => {
+            el.innerHTML = IconsLoader.formSvg(IconPaths.arrow_down);
+        });
+
+        menu_toggle_buttons.forEach(el=>{
+            el.innerHTML = IconsLoader.formSvg(IconPaths.burger_menu);
+        });
+    },
+
+    formSvg: (path) => {
+        return `<svg style="height: 100%; width: 100%;" viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+            <path d="${path}" fill="#323232"/>
+        </svg>`;
+    }
+}
+
+
+
+
+
+var IconPaths = {
+    arrow_down: "M7.41 8.58997L12 13.17L16.59 8.58997L18 9.99997L12 16L6 9.99997L7.41 8.58997Z",
+    burger_menu: "M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z"
+}
+
+
+
+
 var Device = {
     mobile: 1,
     tablet: 2,
@@ -650,12 +688,6 @@ var Theme = {
             desktop: 16,
             scaling: false
         },
-        "nav-height": {
-            mobile: 65,
-            tablet: 55,
-            desktop: 55,
-            scaling: false
-        },
         "main-padding": {
             mobile: 70,
             tablet: 50,
@@ -668,8 +700,17 @@ var Theme = {
         }
     },
 
+
     device: Device.desktop,
+    
+    getDeviceString: () => Device.stringOf(Theme.device),
+
     scale_ratio: 1,
+
+    sizes: {
+        navbar: 55,
+        sidebar: 300
+    },
 
     get: (category, index=0, all = false) => {
         let reference = Theme.current_theme[category];
@@ -804,10 +845,32 @@ window.addEventListener("DOMContentLoaded", function(){
 });
 
 
+
 String.prototype.replaceAll = function(match, value) { return this.split(match).join(value)};
 Element.prototype.hasClass = function(classname) {
     return this.classList.toString().split(" ").includes(classname);
 } 
+
+
+function sidebar(element) {
+    let scaffold = element.closest(".su-body");
+    if(!scaffold) throw("Cannot toggle sidebar - no scaffold found");
+
+    let sidebar = scaffold.querySelector(".su-sidebar");
+    if(!sidebar) throw("Cannot toggle sidebar - no sidebar found");
+
+
+    let visible = sidebar.hasAttribute("visible");
+    if(!visible) {
+        sidebar.style.display = "block";
+        sidebar.setAttributeNode(document.createAttribute("visible"));
+    } else {
+        sidebar.style.display = "none";
+        sidebar.removeAttribute("visible");
+    }
+}
+
+
 function dropdown(element) {
     if(element.hasClass("su-dropdown-btn")) {
         console.time("Dropdown time");
