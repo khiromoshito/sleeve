@@ -78,8 +78,10 @@ function DynamicElement(element) {
             let found = document.querySelector(`[rid='${this.id}']`);
             if(found)
                 this.target_element = found;
-            else
-            throw new Error(`Dynamic element with rid ${this.id} may have been removed, or the rid attribute was modified externally`);
+            else {
+                delete Sleeve._dynamic_elements[this.id];
+                return false;
+            }
         }
         console.time("Dynamic element update time");
         let element_string = SleeveDOM.nodeToString(this.reference_element);
@@ -94,6 +96,7 @@ function DynamicElement(element) {
 
         if(!this.isClean) this.clean();
         console.timeEnd("Dynamic element update time");
+        return true;
     }
 
     this.scanValues();

@@ -402,7 +402,12 @@ function State(value, listeners = []) {
     };
 
     this.broadcast = () => {
-        this.listeners.forEach(listener=>listener.update());
+        this.listeners.forEach((listener, i)=>{
+            let after = listener.update();
+            if(!after) this.listeners[i] = null;
+        });
+
+        this.listeners = this.listeners.filter(l=>l!=null);
     };
 
     this.addListener = (listenerId) => {
