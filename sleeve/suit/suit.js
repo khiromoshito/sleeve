@@ -145,6 +145,17 @@ var Suit = {
             Theme.sizes.sidebar = width_num;
             el.removeAttribute("width");
         }],
+        ["sidebar-toggle",   "div",      "su-sidebar-togglebtn", null, el=>{
+            el.setAttribute("onclick", "sidebar(this)");
+            if(el.hasAttribute("auto-appear")) {
+                const oldcallack = document.onsuitload;
+                if(!document.querySelector(".su-body") ||
+                    !document.querySelector(".su-sidebar"))
+                    el.style.display = "none";    
+                el.setAttribute("device", "mobile, tablet");
+                el.removeAttribute("auto-appear");
+            }
+        }],
         
         ["blockbtn",         "button",      "su-btn-block"],
 
@@ -853,7 +864,7 @@ Element.prototype.hasClass = function(classname) {
 
 
 function sidebar(element) {
-    let scaffold = element.closest(".su-body");
+    let scaffold = element.closest(".su-body") || document.querySelector(".su-body"); 
     if(!scaffold) throw("Cannot toggle sidebar - no scaffold found");
 
     let sidebar = scaffold.querySelector(".su-sidebar");
@@ -882,8 +893,12 @@ function sidebar(element) {
         switch(sidebar.getAttribute("transition")) {
             case "slide":
                 sidebar.style.display = "block";
-                from = {position: "fixed", left: is_left ? "-100%" : "100%"};
-                to = {position: "fixed", left: "0px"};
+                sidebar.style.position = "fixed";
+
+                let width = getComputedStyle(sidebar).getPropertyValue("width");
+
+                from = {left: is_left ? "-"+width : width};
+                to = {left: "0px"};
 
                 sidebar.animate(!visible ? [from, to] : [to, from], {duration: 120, easing: "ease"})
                     .onfinish = () => toggleVisibility();
@@ -897,7 +912,7 @@ function sidebar(element) {
 
                 sidebar.animate(!visible ? [from, to] : [to, from], {duration: 120, easing: "ease"})
                     .onfinish = () => toggleVisibility();
-            break; 
+            break;
             default:
                 toggleVisibility();
         }
