@@ -18,6 +18,9 @@
     btnPaddingH: ${15*Theme.scale}px;
 };;
 
+.su-tab-pages {
+    overflow-x: auto;
+};;
 
 .su-tab-pages > *:not([tab-selected]) {
     display: none;
