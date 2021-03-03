@@ -62,11 +62,16 @@ var Suit = {
 
     concludeInit: () => {
 
-
-        Suit.updateStyles();
-        Suit.fixBlockCodes();
+        Suit.had_external = false;
+        Theme.updateScale(true);
         IconsLoader.loadIconDependencies();
         Suit.showPage();
+
+        Suit.fixBlockCodes();
+
+        // window.addEventListener("DOMNodeInserted", () => {
+        //     Sleeve.update();
+        // });
 
         if(document.onsuitload) document.onsuitload();
         // console.log("loadListener: ", document.onsuitload);
@@ -272,6 +277,7 @@ var Suit = {
 
                 });
             } else {
+                
                 let suitstyle = new SuitStyle(ss.innerText);
                 Suit._suitstyles.push(suitstyle);
 
@@ -331,8 +337,8 @@ var Suit = {
         });
     },
 
-    fixBlockCodes: () => {
-        document.querySelectorAll(".su-code-block").forEach(el=>{
+    fixBlockCodes: (root = document) => {
+        root.querySelectorAll(".su-code-block").forEach(el=>{
             let parent = el.parentElement;
             let parent_style = window.getComputedStyle(parent, null);
 
@@ -863,15 +869,15 @@ Element.prototype.hasClass = function(classname) {
 } 
 
 
-function sidebar(element) {
+function sidebar(element, toVisible) {
     let scaffold = element.closest(".su-body") || document.querySelector(".su-body"); 
     if(!scaffold) throw("Cannot toggle sidebar - no scaffold found");
 
     let sidebar = scaffold.querySelector(".su-sidebar");
     if(!sidebar) throw("Cannot toggle sidebar - no sidebar found");
 
-
-    let visible = sidebar.hasAttribute("visible");
+    
+    let visible = toVisible!==undefined ? !toVisible : sidebar.hasAttribute("visible");
     
     let toggleVisibility = () => {
         if(!visible) {
@@ -1049,6 +1055,8 @@ function tab(element) {
             tab_buttons.children[index]
                 .setAttributeNode(document.createAttribute("tab-selected"));
     }
+
+    Suit.fixBlockCodes(tab_element);
 }
 
 window.hasSuit = true;
