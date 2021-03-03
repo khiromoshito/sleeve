@@ -15,6 +15,11 @@ app.get("/", (req, res)=>{
     //res.send(__dirname);
 });
 
+app.get("docs/", (req, res)=>{
+    res.sendFile(path.join(__dirname, "docs/index.html"));
+    //res.send(__dirname);
+});
+
 app.get("/favicon.png", (req, res)=>{
     res.sendFile(path.join(__dirname, "favicon.png"));
     //res.send(__dirname);
