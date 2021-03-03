@@ -149,6 +149,8 @@ var PageRoute = {
 
 
         let processRoute = () => {
+
+            thenState();
             //console.log(res);
             PageRoute.onRoutingProgress(url, 0.8);
 
@@ -198,13 +200,11 @@ var PageRoute = {
                 location.href = url;
             } else if(preloaded[0]) {
                 route_data = preloaded[1];
-                thenState();
                 processRoute();
             } else {
                 PageRoute._preloading_callbacks[url]
                     = function(res){
                         route_data = res;
-                        thenState();
                         processRoute();
                     };
             }
@@ -235,7 +235,7 @@ var PageRoute = {
         let route_data = null;
 
         let processRoute = () => {
-
+            thenState();
             let temp_page = document.createElement("html");
             temp_page.innerHTML = route_data;
 
@@ -327,8 +327,8 @@ var PageRoute = {
 
         
 
-        let page_routing_elements = document.querySelectorAll("[page-routing][href]");
-        let content_routing_elements = document.querySelectorAll("[content-routing][href]");
+        let page_routing_elements = document.querySelectorAll("[page-routing][href][preloaded]");
+        let content_routing_elements = document.querySelectorAll("[content-routing][href][preloaded]");
 
         let links = [];
 
@@ -574,12 +574,14 @@ function configureClicks(element) {
         
         return false;
     } else if(element.hasAttribute("page-routing")) {
-        PageRoute._current_route_mode = "page";
-        history.replaceState({route_mode: "page"}, "");
+        PageRoute.toPageRoute(route_url, ()=>{}, ()=>{
+            PageRoute._current_route_mode = "page";
+            history.replaceState({route_mode: "page"}, "");
 
-
-        history.pushState({route_mode: "page"}, "", route_url);
-        PageRoute.toPageRoute(route_url);
+            history.pushState({route_mode: "page"}, "", route_url);
+        });
+        
+        
         return false;
     }
 
