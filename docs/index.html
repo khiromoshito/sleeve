@@ -1,0 +1,66 @@
+<script src="../sleeve/core/lib/route.js"></script>
+
+<route view="docs_view.html" style="display: none">
+    <content name="title">Introduction</content>
+    <content name="content">
+        Sleeve is a front-end web framework for building highly flexible webpages. 
+        It acts like an extension to HTML, with 
+        <code mode="html" style="word-break: normal;">&lt;semantic elements></code> and special attributes
+        for crafting dynamic user interface.
+
+        <br><br>
+
+        Below is a basic scaffolding architecture of Sleeve.
+        <br><br>
+
+        <block-code mode="html">
+&lt;scaffold>
+    &#9;&lt;navbar>
+        &lt;navbar-left>
+            &lt;img src="favicon.png" />
+        &lt;/navbar-left>
+        &lt;navbar-right>
+            &lt;nav-links>
+                &lt;a href="home.html">HOME&lt;/a>
+                &lt;a href="contact.html">CONTACT&lt;/a>
+                &lt;a href="signin.html">SIGN IN&lt;/a>
+            &lt;/nav-links>
+        &lt;/navbar-right>
+    &lt;/navbar>
+    &lt;sidebar>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Pellentesque porttitor, magna quis ultricies ultricies, 
+        ex ex accumsan nulla, eget blandit elit nisl sed metus. 
+        Phasellus pretium arcu vel libero consectetur, 
+        id placerat metus varius. Mauris id mauris nec diam 
+        facilisis luctus. Maecenas luctus congue faucibus. 
+        Phasellus tristique rutrum accumsan.
+    &lt;/sidebar>
+    &lt;main>
+        &lt;h3>Lorem Ipsum&lt;/h3>
+        &lt;h6>John Doe&lt;/h6>
+        &lt;br/>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Pellentesque porttitor, magna quis ultricies ultricies, 
+        ex ex accumsan nulla, eget blandit elit nisl sed metus. 
+        Phasellus pretium arcu vel libero consectetur, 
+        id placerat metus varius. Mauris id mauris nec diam 
+        facilisis luctus. Maecenas luctus congue faucibus. 
+        Phasellus tristique rutrum accumsan.
+    &lt;/main>
+&lt;/scaffold>
+        </block-code>
+        
+        <br/>
+        <br/>
+
+        Sleeve also has a powerful DOM manipulation. Here is a 
+        simple snippet that iterates an element 100 times.
+
+        <br/>
+        <br/>
+
+        <div dynamic>{{showPreviewCode('intro-iteration')}}</div>
+
+    </content>
+</route>
