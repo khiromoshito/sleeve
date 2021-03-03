@@ -149,7 +149,6 @@ var PageRoute = {
 
 
         let processRoute = () => {
-
             thenState();
             //console.log(res);
             PageRoute.onRoutingProgress(url, 0.8);
@@ -168,6 +167,7 @@ var PageRoute = {
 
             let temp = document.createElement("html");
             temp.innerHTML = route_data;
+
             PageRoute.relocatePaths(temp, base_url);
 
 
@@ -181,10 +181,16 @@ var PageRoute = {
             });
 
             window.scroll(0, 0);
+
             ContentHandler.setContent(contents);
+
+
             
             if(window.hasSleeve) Sleeve.initialise();
             callback();
+
+
+            
 
             PageRoute.onRoutingProgress(url, 1);
             setTimeout(()=>{
@@ -236,9 +242,10 @@ var PageRoute = {
 
         let processRoute = () => {
             thenState();
+
+            console.clear();
             let temp_page = document.createElement("html");
             temp_page.innerHTML = route_data;
-
 
             if(history.state)
                 history.replaceState({...history.state, route_data: route_data, route_src: url}, "");
@@ -248,7 +255,6 @@ var PageRoute = {
 
 
             
-            console.clear();
 
             let updateProgress = (progress) => {
                 console.log("---- Loaded " + Math.round(progress) + "%");
@@ -257,29 +263,124 @@ var PageRoute = {
 
             updateProgress(40);
 
-            ResourceLoader.loadRouteView(temp_page, ()=>{}, ()=>{
-                console.log("---- Loaded 60%");
+            let writePage = () => {
+                document.write(temp_page.innerHTML);
+                document.close();
+                PageRoute.onRoutingSuccess(url);
+            
+                callback();
+                console.log("DONE!!!");
+            }
 
-                ResourceLoader.loadSuitStyles(temp_page, (i, t)=>{
-                        updateProgress(((i/t)*20)+60);
-                    }, 
-                    ()=>{
-                        ResourceLoader.loadScripts(temp_page, (i, t)=>{
-                            updateProgress(((i/t)*20)+80);
+            let sandbox = document.createElement("iframe");
+            sandbox.style.display = "none";
+            document.body.appendChild(sandbox);
+
+
+            let externals = temp_page.querySelectorAll("script[src],suit-style[src],route[view]");
+            let ext_parent = document.createElement("html");
+            let idcounter = 0;
+            
+            
+            let base = RouteUtils.sliceUrl(location.href).basef;
+            
+            externals.forEach(el=>{
+                el.setAttribute("slexid", (++idcounter)+"");
+                
+
+                //console.log("Old source: " + (el.getAttribute("src") || el.getAttribute("view")));
+
+                if(el.hasAttribute("src")) 
+                    el.setAttribute("src", RouteUtils.getAbsolutePath(base, el.getAttribute("src")));
+                else if(el.hasAttribute("view")) 
+                    el.setAttribute("view", RouteUtils.getAbsolutePath(base, el.getAttribute("view")));
+                
+
+                ext_parent.appendChild(el.cloneNode(true));
+
+                //console.log("New source: " + (el.getAttribute("src") || el.getAttribute("view")));
+            });
+
+            console.log(location.href);
+            console.log(base);
+
+            let injectHTML = `<base href="`+base+`"></base><script>
+                var ResourceLoader;
+                var updateProgress;
+                var returnResources;
+
+                function loadResources() {
+                    console.log(location.href);
+                    ResourceLoader.loadRouteView(document, ()=>{}, ()=>{
+                    console.log("---- Loaded 60%");
+
+                    ResourceLoader.loadSuitStyles(document, (i, t)=>{
+                            updateProgress(((i/t)*20)+60);
                         }, 
                         ()=>{
-                            setTimeout(()=>{
-                                document.write(temp_page.innerHTML);
-                                document.close();
-                                PageRoute.onRoutingSuccess(url);
-                            
-                                callback();
-                                console.log("DONE!!!");
-                            }, 100);
-                            
+                            ResourceLoader.loadScripts(document, (i, t)=>{
+                                updateProgress(((i/t)*20)+80);
+                            }, 
+                            ()=>{
+                                setTimeout(()=>{
+                                    returnResources();
+                                }, 100);
+                            });
                         });
-                });
-            });
+                    });
+                }
+            <\/script>`;
+
+            sandbox.contentDocument.write(injectHTML);
+            sandbox.contentDocument.documentElement.innerHTML += ext_parent.innerHTML;
+            
+            sandbox.contentWindow.ResourceLoader = ResourceLoader;
+            sandbox.contentWindow.updateProgress = updateProgress;
+            sandbox.contentWindow.returnResources = () => {
+                //console.log("Resources are now ready to be returned");
+                sandbox.contentDocument.querySelectorAll("[slexid]").forEach(
+                    el=>{
+                        //console.log(el);
+                        const slexid = el.getAttribute("slexid");
+                        el.removeAttribute("slexid");
+                        let unloaded = temp_page.querySelector("[slexid='"+slexid+"']");
+                        
+                        unloaded.parentElement.replaceChild(el.cloneNode(true), unloaded);
+                        //writePage();
+                    }
+                );
+
+                let preloaded_view = sandbox.contentDocument.querySelector("[preloaded-route-view]");
+                if(preloaded_view) {
+                    console.log(preloaded_view);
+                    // preloaded_view.style.display = "none";
+                    temp_page.appendChild(preloaded_view);
+                }
+                // writePage();
+
+                //console.log(temp_page);
+                writePage();
+            };
+            sandbox.contentWindow.loadResources();
+
+            // ResourceLoader.loadRouteView(temp_page, ()=>{}, ()=>{
+            //     console.log("---- Loaded 60%");
+
+            //     ResourceLoader.loadSuitStyles(temp_page, (i, t)=>{
+            //             updateProgress(((i/t)*20)+60);
+            //         }, 
+            //         ()=>{
+            //             ResourceLoader.loadScripts(temp_page, (i, t)=>{
+            //                 updateProgress(((i/t)*20)+80);
+            //             }, 
+            //             ()=>{
+            //                 setTimeout(()=>{
+            //                     writePage();
+            //                 }, 100);
+                            
+            //             });
+            //     });
+            // });
 
         };
 
@@ -378,11 +479,13 @@ var ResourceLoader = {
         let route_element = root.querySelector("route[view]");
         if(route_element) {
             let view_src = route_element.getAttribute("view");
+            //console.log("Route view: " + view_src);
             fetch(view_src).then(
                 res=>res.text().then(res=>{
                     //console.log("------------ LOADED ROUTEVIEW: ", route_element);
-                    route_element.insertAdjacentHTML("afterend", 
-                        "<preloaded-route-view>"+res+"</preloaded-route-view>");
+                    let injectPreload = `<script preloaded-route-view>var preloaded_route_view = \``+res.replace(/\<\//g, "<\\/")+`\`;<\/script>`;
+                    //(injectPreload);
+                    route_element.insertAdjacentHTML("afterend", injectPreload);
                     progressCallback();
                     callback();
                 })
@@ -417,6 +520,7 @@ var ResourceLoader = {
         } else {
             // Loop through all sources
             suit_styles.forEach(suit_style=>{
+                //console.log("Suit style: " + suit_style.getAttribute("src"));
                 fetch(suit_style.getAttribute("src")).then(
                     res=>res.text().then(
                         res=>{
@@ -457,6 +561,7 @@ var ResourceLoader = {
         else {
             // Loop through all sources
             _scripts.forEach(script=>{
+                //console.log("Script: " + script.getAttribute("src"));
                 fetch(script.getAttribute("src")).then(
                     res=>res.text().then(
                         res=>{
@@ -468,7 +573,6 @@ var ResourceLoader = {
                             script.removeAttribute("src");
                             script.innerHTML = res;
 
-                            //root.innerHTML += `<script>` + res + `<\/script>`;
 
                             finished_load();
                         }
@@ -482,7 +586,7 @@ var ResourceLoader = {
 var RouteUtils = {
     sliceUrl: (url) => {
         let protocol_index = url.includes("//") ? url.indexOf("//")+2 : 0;
-        let protocol = url.slice(0, protocol_index-2);
+        let protocol = url.slice(0, protocol_index!=0 ? protocol_index : 0);
         
         let bare = url.slice(protocol_index);
     
@@ -505,6 +609,8 @@ var RouteUtils = {
 
         let basef = protocol + "//" + base;
 
+        
+
         return {protocol, bare, bare_nm, basef, base, domain, pathf, params, fragment};
     },
 
@@ -514,21 +620,27 @@ var RouteUtils = {
      * 
      *  For example, `getAbsolutePath('www.sample.com/pages/', '../files/image.png')`
      *  will be evaluated to the absolute path `'www.sample.com/files/image.png'` */
-    getAbsolutePath: (base_path, relative_path) => {
-        let absolute = base.replace(/(?:\/|\\)$/, "").slice(
-            base.includes("//") ? base.indexOf("//") + 2 : 0
-        );
-
+    getAbsolutePath: (base, relative_path) => {
+        // The base path must be complete in format-- protocol://domain/[path]/
+        let start_index = base.indexOf("://")+3;
+        if(relative_path.includes("://")) return relative_path;
         
-        let path_segments = absolute.split("/");
+        
+        let path_segments = base.slice(start_index).split("/").filter(s=>s.trim()!="");
 
 
-        if(relative_path=="/") return path_segments[0];
+        relative_path = relative_path.trim();
+        if(relative_path.startsWith("/")) {
+            path_segments = [path_segments[0]];
+            relative_path = relative_path.slice(1);
+        } else if(relative_path.startsWith("../") && path_segments.length>0) {
+            if(path_segments.length>1) path_segments.pop();
+            relative_path = relative_path.slice(3);
+        } else if(relative_path.startsWith("./")) {
+            relative_path = relative_path.slice(2);
+        }
 
-        if(relative_path.startsWith("../") && path_segments.length>0)
-            path_segments.pop();
-
-        return path_segments.join("/");
+        return base.slice(0, start_index) + path_segments.join("/") + "/" + relative_path;
 
     }
 }
@@ -551,11 +663,13 @@ var RouteUtils = {
 // } else {
 
 window.onpopstate = (event) => {
-    if(PageRoute._current_route_mode && history.state && history.state.route_mode) {
-        if(PageRoute._current_route_mode == "content") 
+    if(history.state && history.state.route_mode) {
+        if(history.state.route_mode == "content") {
             PageRoute.toContentRoute(location.href);
-        else if(PageRoute._current_route_mode == "page") 
+        }
+        else if(history.state.route_mode == "page") { 
             PageRoute.toPageRoute(location.href);
+        }
     }
 }
 
@@ -565,25 +679,40 @@ function configureClicks(element) {
     let route_url = element.getAttribute("href");
 
     if(element.hasAttribute("content-routing")) {
+
+        let closest_sidebar = element.closest(".su-sidebar[visible]");
+        if(closest_sidebar && closest_sidebar.hasAttribute("visible")) sidebar(closest_sidebar, false);
+        
         PageRoute.toContentRoute(route_url, ()=>{}, ()=>{
             PageRoute._current_route_mode = "content";
-            history.replaceState({route_mode: "content"}, "");
+            if(!history.state || !history.state.route_mode) 
+                history.replaceState({route_mode: "content"}, "");
 
             history.pushState({route_mode: "content"}, "", route_url);
         });
-        
+
+
         return false;
     } else if(element.hasAttribute("page-routing")) {
+
+        let closest_sidebar = element.closest(".su-sidebar[visible]");
+        if(closest_sidebar && closest_sidebar.hasAttribute("visible")) sidebar(closest_sidebar, false);
+        
+        
+
         PageRoute.toPageRoute(route_url, ()=>{}, ()=>{
             PageRoute._current_route_mode = "page";
-            history.replaceState({route_mode: "page"}, "");
+            
+            if(!history.state || !history.state.route_mode) 
+                history.replaceState({route_mode: "content"}, "");
 
             history.pushState({route_mode: "page"}, "", route_url);
         });
-        
-        
+
+
         return false;
     }
+
 
     return true;
 }

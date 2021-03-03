@@ -1,12 +1,13 @@
 
 window.isRunnable = true;
 
-window.addEventListener("DOMContentLoaded", ()=>{
+window.addEventListener("load", ()=>{
     //console.log("Hurrah! ContentHandler is now ready!");
 
     // As support to Sleeve-content's route loading, 
     // this route will first check for any pre-loaded views
     // inside a <preloaded-route-view> element
+    
     relocatePaths();
     processRoute();
 });
@@ -37,17 +38,19 @@ function processRoute() {
         // so we load the view (if there is any)
 
         let view;
-        let preloaded_view_element = document.querySelector("preloaded-route-view");
-        if(preloaded_view_element) view = preloaded_view_element.innerHTML;
+        
+        if(window.preloaded_route_view) {
+            view = window.preloaded_route_view;
+        } else {
+        
+            let preloaded_view_element = document.querySelector("preloaded-route-view");
+            if(preloaded_view_element) view = preloaded_view_element.innerHTML;
+        }
+        
 
         let processView = () => {
-
-
-
             let view_url = document.querySelector("route[view]").getAttribute("view");
-            let base = RouteUtils.sliceUrl(view_url).base;
-
-
+            let base = RouteUtils.sliceUrl(view_url).basef;
 
 
             //console.log("Loaded! ", res);
@@ -74,7 +77,7 @@ function processRoute() {
                 });
             }); 
 
-            
+            console.log(temp.innerHTML);
             document.write(temp.innerHTML);
             document.close();
 
@@ -151,8 +154,9 @@ function processRoute() {
 
 var RouteUtils = {
     sliceUrl: (url) => {
-        let protocol_index = url.includes("//") ? url.indexOf("//")+2 : 0;
-        let protocol = url.slice(0, protocol_index-2);
+        let protocol_index = url.includes("://") ? url.indexOf("://")+3 : 0;
+        let protocol = url.slice(0, protocol_index!=0 ? protocol_index : 0);
+
         
         let bare = url.slice(protocol_index);
     
@@ -173,7 +177,9 @@ var RouteUtils = {
             bare_nm.lastIndexOf(".")>bare_nm.lastIndexOf("/") ? 
                 bare_nm.lastIndexOf("/") + 1 : bare_nm.length) : "./";
 
-        let basef = protocol + "//" + base;
+        let basef = protocol + base;
+
+        console.log({basef});
 
         return {protocol, bare, bare_nm, basef, base, domain, pathf, params, fragment};
     },
