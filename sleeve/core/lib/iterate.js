@@ -73,8 +73,8 @@ function IteratingElement(element) {
                 new_renders.push(this.renderItem(i));
         }
 
-        if(!document.body.contains(this.target_element))
-            throw new Error("Cannot render iterate elements. No achor element found.");
+        if(!this.target_element.parentElement)
+            throw new Error("Cannot render iterate elements. Anchor element must have a parent.");
 
         if(this.rendered_nodes.length>0) {
 
@@ -99,6 +99,13 @@ function IteratingElement(element) {
             clone_string = clone_string.
                 replaceAll(`%${item_config[0]}%`, item_config[1]+"");
 
+        console.log(i);
+        if(!this.reference_element.hasAttribute("dynamic")) {
+            clone_string = clone_string.replace(/\{\{(?:[^\}]|\}(?!\}))*\}\}/g, m=>{
+                return eval(m.slice(2, -2));
+            
+            });
+        }
 
         let clone_node = SleeveDOM.stringToNode(clone_string);
         return clone_node;
