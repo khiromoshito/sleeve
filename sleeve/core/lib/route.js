@@ -31,6 +31,8 @@ function relocatePaths(root = document, base = RouteUtils.sliceUrl(location.href
 
 function processRoute() {
 
+    console.clear();
+
     let route_element = document.querySelector("route[view]");
     if(route_element) {
         // If a route element is found, 
