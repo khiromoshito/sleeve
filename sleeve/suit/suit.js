@@ -80,6 +80,8 @@ var Suit = {
         // });
 
         if(document.onsuitload) document.onsuitload();
+
+        Suit.checkJumps();
         // console.log("loadListener: ", document.onsuitload);
         // console.log("self: ", document);
         // console.log("owner: ", document.ownerDocument);
@@ -392,6 +394,26 @@ var Suit = {
 
 
         
+    },
+
+    checkJumps: () => {
+        if(location.href.lastIndexOf("#") > location.href.lastIndexOf("/"))
+            Suit.jumpTo(location.href.slice(location.href.lastIndexOf("#")+1));
+    },
+
+    jumpTo: (section) => {
+        let section_element = document.querySelector("[section='"+section+"']");
+
+        if(section_element) {
+            console.log("Jumping to section: " + section);
+            let position_target = section_element.offsetTop - 50;
+            let position = Math.min(
+                document.documentElement.scrollHeight - 
+                    document.documentElement.offsetHeight,
+                Math.max(0, position_target));
+
+            window.scroll(0, position);
+        }
     }
 
 }
