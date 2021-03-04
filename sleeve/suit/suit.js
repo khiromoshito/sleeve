@@ -1037,14 +1037,27 @@ function tab(element) {
     let temp_element = element;
     while(temp_element = temp_element.previousElementSibling) index++;
 
-    Array.prototype.slice.call(tab_pages.children).forEach(el=>
-        el.removeAttribute("tab-selected")
-    );
+    let past_height = 0;
+    Array.prototype.slice.call(tab_pages.children).forEach(el=>{
+        if(el.hasAttribute("tab-selected")) {
+            let height = el.offsetHeight;
+            if(height > past_height) past_height = height;       
+            el.removeAttribute("tab-selected");
+        }
+    });
 
-    if(tab_pages.children[index]) 
-        tab_pages.children[index]
-            .setAttributeNode(document.createAttribute("tab-selected"));
+    console.log("PAST HEIGHT: " + past_height);
 
+    let new_page = tab_pages.children[index];
+    if(new_page) {
+        new_page.setAttributeNode(document.createAttribute("tab-selected"));
+        let page_height = new_page.offsetHeight;
+        
+        console.log("NEW PAGE HEIGHT: " + page_height);
+        if(tab_element.hasAttribute("stretch") && page_height<past_height) {
+            new_page.style.height = past_height + "px";
+        }
+    }
     //console.log(tab_pages.children);
 
     if(tab_buttons) {

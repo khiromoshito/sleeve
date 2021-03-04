@@ -22,6 +22,10 @@
     overflow-x: auto;
 };;
 
+.su-tab-pages > * {
+    box-sizing: border-box;
+};;
+
 .su-tab-pages > *:not([tab-selected]) {
     display: none;
 };;
