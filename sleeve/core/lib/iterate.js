@@ -99,7 +99,6 @@ function IteratingElement(element) {
             clone_string = clone_string.
                 replaceAll(`%${item_config[0]}%`, item_config[1]+"");
 
-        console.log(i);
         if(!this.reference_element.hasAttribute("dynamic")) {
             clone_string = clone_string.replace(/\{\{(?:[^\}]|\}(?!\}))*\}\}/g, m=>{
                 return eval(m.slice(2, -2));
