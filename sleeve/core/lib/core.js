@@ -46,8 +46,11 @@ var Sleeve = {
 
         Sleeve.replicateReferencedElements(root);
         
-        if(window.hasSleeveDynamic) Sleeve.scanDynamicElements(root);
-
+        if(window.hasSleeveDynamic) {
+            Sleeve.scanDynamicElements(root);
+            Object.values(Sleeve._dynamic_elements).forEach(dynamic_element=>
+                dynamic_element.update());
+        }
 
         console.timeEnd("Sleeve update time");
     },
