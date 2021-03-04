@@ -3,6 +3,8 @@ var Global = {
     routeStack: []
 };
 
+var C = (name) => "";
+
 var ContentHandler = {
     _content: {},
 
@@ -18,11 +20,27 @@ var ContentHandler = {
     },
 
     setContent: (content) => {
-
-
         Object.keys(content).forEach(content_name=>{
             ContentHandler._content[content_name]
                 = content[content_name];
+        });
+
+        Object.values(ContentHandler._content).map(content=>{
+            let temp_content = document.createElement("html");
+            temp_content.innerHTML = content;
+
+            
+            temp_content.querySelectorAll("script:not([src])").forEach(script_raw=>{
+                let script = document.createElement("script");
+                script.innerHTML = script_raw.innerHTML;
+                Array.prototype.slice.call(script_raw.attributes).forEach(attr=>{
+                    script.setAttribute(attr.name, attr.value);
+                });
+                document.head.appendChild(script);
+                script_raw.parentElement.removeChild(script_raw);
+            });
+
+            return temp_content.innerHTML;
         });
         ContentHandler.displayAll();
     },
@@ -42,7 +60,10 @@ var ContentHandler = {
         content_elements.forEach(el=>{
             let content_name = el.getAttribute("content");
             let content_value = ContentHandler.get(content_name);
+
             if(content_value) el.innerHTML = content_value;
+
+            
         });
         
     },
@@ -180,7 +201,12 @@ var PageRoute = {
                 }
             });
 
+
             window.scroll(0, 0);
+
+            window.C = function(name) {
+                return contents[name] || "";
+            };
 
             ContentHandler.setContent(contents);
 
@@ -685,8 +711,8 @@ function configureClicks(element) {
         
         PageRoute.toContentRoute(route_url, ()=>{}, ()=>{
             PageRoute._current_route_mode = "content";
-            if(!history.state || !history.state.route_mode) 
-                history.replaceState({route_mode: "content"}, "");
+            if(!history.state) 
+                history.replaceState({route_mode: "content", ...history.state}, "");
 
             history.pushState({route_mode: "content"}, "", route_url);
         });
@@ -758,6 +784,8 @@ history.scrollRestoration = "manual";
 document.onsuitload = () => {
     setTimeout(PageRoute.preloadRoutes, 100);
 }
+
+
 
 // class Route {
     
