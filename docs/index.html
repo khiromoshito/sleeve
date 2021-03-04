@@ -10,7 +10,36 @@
 
         <br><br>
 
-        Below is a basic scaffolding architecture of Sleeve.
+        This is a newly-developed framework. Its first commit was on <i>February 15, 2020</i>,
+        and until now, this project is still under progressive development. Sleeve is open source,
+        and you can contribute to the codebase as well. The full project repository (including this documentation)
+        can be found <a href="https://github.com/khiromoshito/sleeve-docs">here</a>. 
+        
+
+        <br><br>
+
+        Sleeve has been developed to help overcome difficulties in developing reactive, responsive web pages. 
+        Sleeve is composed of two components that build up the whole framework:
+        <br><br>
+        <div responsive style="display: flex; margin: {{R(0,20,25)}}px; flex-direction: {{R('column', 'column', 'row')}};">
+            <div style="flex: 1; margin: 25px">
+                <strong>CORE</strong><br>
+                For the DOM manipulations, state management and routing
+            </div>
+            <div style="flex: 1; margin: 25px">
+                <strong>Sleeve-Suit <i>(User Interface)</i></strong><br>
+                For widgets, semantics and responsive layout
+            </div>
+        </div>
+
+        <br><br>
+
+        The core component provides features for structuring the page, while Suit manages the design. 
+        Both execute for a dynamic web application.
+
+        <br><br>
+        Sleeve is built to be semantic to make the codebase much more readable and easily manageable. 
+        Below is a basic scaffolding architecture with Sleeve-Suit.
         <br><br>
 
         <block-code mode="html">
@@ -54,13 +83,43 @@
         <br/>
         <br/>
 
-        Sleeve also has a powerful DOM manipulation. Here is a 
-        simple snippet that iterates an element 100 times.
+        Sleeve also has a powerful DOM manipulation, 
+        and most of it does not require writing JavaScript. 
+        Sleeve core makes use of the HTML element itself to
+        host DOM manipulations. Just adding a simple attribute or two,
+        and the element becomes alive.
+        
+        <br><br>
+
+        Here is a simple snippet that iterates an element 100 times.
 
         <br/>
         <br/>
 
         <div dynamic>{{showPreviewCode('intro-iteration')}}</div>
+
+        <br><br>
+
+        Sleeve's approach aids web development to be faster, 
+        more efficient, flexible and scalable. Powerful as it can be,
+        Sleeve supports JavaScript-ing directly in HTML elements (core)
+        and even in CSS (Sleeve-Suit). And there's more of the features to 
+        know of. Sleeve is simply made to become productive.
+
+        <br><br>
+
+        Follow along this documentation for a full list of what Sleeve can offer.
+
+        <br><br>
+
+        <hr>
+
+        <br>
+
+        Hi devs! Sleeve is still in beta. It is a community project where developers
+        can contribute to the project. See the full repository <a href="https://github.com/khiromoshito/sleeve-docs">here</a>.
+
+        <br><br>
 
     </content>
 </route>
