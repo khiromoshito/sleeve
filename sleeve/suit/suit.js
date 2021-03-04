@@ -19,9 +19,15 @@ var Suit = {
         console.time("sleeve-suit load time");
         console.log("Initialising sleeve-suit");
 
-        document.head.innerHTML += `<meta name="viewport" 
-            content="width=device-width">`;
-
+        let viewport_meta = document.querySelector("meta[name='viewport']");
+        if(!viewport_meta) 
+            document.head.innerHTML += `<meta name="viewport" 
+                content="width=device-width">`;
+        else if(viewport_meta.getAttribute("content"))
+            viewport_meta.setAttribute("content", "width=device-width");
+        else if(!viewport_meta.getAttribute("content").includes("width="))
+            viewport_meta.setAttribute("content", 
+                viewport_meta.getAttribute("content") + ";width=device-width");
 
         Theme.updateScale(false);
 
