@@ -17,13 +17,13 @@ function relocatePaths(root = document, base = RouteUtils.sliceUrl(location.href
         console.log(base);
         root.querySelectorAll("[src]").forEach(el=>{
             let src = el.getAttribute("src") || el.src;
-            src = base + "/" + src;
+            src = RouteUtils.getAbsolutePath(base, src);
     
             el.setAttribute("src", src);
         });
         root.querySelectorAll("[href]").forEach(el=>{
             let href = el.getAttribute("href") || el.href;
-            href = base + "/" + href;
+            href = RouteUtils.getAbsolutePath(base, href);
     
             el.setAttribute("href", href);
         });
@@ -190,21 +190,27 @@ var RouteUtils = {
      * 
      *  For example, `getAbsolutePath('www.sample.com/pages/', '../files/image.png')`
      *  will be evaluated to the absolute path `'www.sample.com/files/image.png'` */
-    getAbsolutePath: (base_path, relative_path) => {
-        let absolute = base.replace(/(?:\/|\\)$/, "").slice(
-            base.includes("//") ? base.indexOf("//") + 2 : 0
-        );
-
+     getAbsolutePath: (base, relative_path) => {
+        // The base path must be complete in format-- protocol://domain/[path]/
+        let start_index = base.indexOf("://")+3;
+        if(relative_path.includes("://")) return relative_path;
         
-        let path_segments = absolute.split("/");
+        
+        let path_segments = base.slice(start_index).split("/").filter(s=>s.trim()!="");
 
 
-        if(relative_path=="/") return path_segments[0];
+        relative_path = relative_path.trim();
+        if(relative_path.startsWith("/")) {
+            path_segments = [path_segments[0]];
+            relative_path = relative_path.slice(1);
+        } else if(relative_path.startsWith("../") && path_segments.length>0) {
+            if(path_segments.length>1) path_segments.pop();
+            relative_path = relative_path.slice(3);
+        } else if(relative_path.startsWith("./")) {
+            relative_path = relative_path.slice(2);
+        }
 
-        if(relative_path.startsWith("../") && path_segments.length>0)
-            path_segments.pop();
-
-        return path_segments.join("/");
+        return base.slice(0, start_index) + path_segments.join("/") + "/" + relative_path;
 
     }
 }
