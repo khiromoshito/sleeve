@@ -30,6 +30,14 @@
         <snippet src="../frags/navbar.html" value-toggle-display="initial" value-favicon-url="../favicon_gray.png"></snippet>
         <sidebar type="sticky" width="350px" transition="slide">
             <a href="./" content-routing><div class="topic-item">Introduction</div></a>
+
+            <dropdown expanded>
+                <dropdown-button>Core</dropdown-button>
+                <dropdown-items style="padding-left: 15px;">
+                    <a href="./core/dynamic.html" content-routing><div class="topic-item">Dynamic Elements</div></a>
+                </dropdown-items>
+            </dropdown>
+            
         </sidebar>
         <main style="height: 1500px">
             <h3 content="title" style="margin-top: 0;"></h3>
@@ -37,7 +45,14 @@
 
             </div>
             <br><br>
+            <hr>
 
+            <br>
+    
+            Hi devs! Sleeve is still in beta. It is a community project where developers
+            can contribute to the project. See the full repository <a href="https://github.com/khiromoshito/sleeve-docs">here</a>.
+    
+            <br><br>
             <footer style="display: none; background-color: #a0a0a0; height: 300px; position: relative; width: 100%; box-sizing: border-box;">
 
             </footer>
@@ -65,7 +80,31 @@
             new IteratingElement(el).iterate();
 
             return `<div style="height: 300px; overflow-y: scroll">`+el_parent.innerHTML+`</div>`;
-        }]
+        }],
+
+        "dynamic-1": ["html", `
+&lt;p dynamic>{{num}}&lt;/p>
+
+&lt;script>
+    var num = 100;
+&lt;/script>
+        `, ()=>`<p rid="1">100</p>`
+
+        ],
+        "dynamic-2": ["html", `
+&lt;p dynamic>{{num}}&lt;/p>
+&lt;p dynamic>{{num+1}}&lt;/p>
+&lt;p dynamic>{{num==100}}&lt;/p>
+
+&lt;script>
+    var num = 100;
+&lt;/script>
+        `, ()=>
+            `<p rid="1">100</p>
+             <p rid="2">101</p>
+             <p rid="3">true</p>
+            `
+        ]
     };
 
     function showPreviewCode(label) {
@@ -74,7 +113,7 @@
 
 
         return `
-            <tabs>
+            <tabs stretch default="1">
                 <tab-buttons>
                     <button>PREVIEW</button>
                     <button>CODE</button>

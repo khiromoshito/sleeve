@@ -1,0 +1,61 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">Dynamic Elements</content>
+    <content name="content">
+        
+        Sleeve was originally based on the concept of 
+        reactive web programming with state management.
+        It is the framework's building block, and the 
+        most important aspect of its architecture.
+
+        <br><br>
+
+        As a brick to the whole foundation, Sleeve introduces
+        <b><i>dynamic elements</i></b>, or elements that can contain
+        direct JavaScript code and update itself whenever triggered.
+
+        <br><br>
+
+        This solves the problem of displaying <i>dynamic values</i> 
+        (values that change) and values dependent from a JS
+        execution. Take a look at the example below, displaying
+        the value of a variable.
+
+        <br><br><br>
+
+        <div dynamic>{{showPreviewCode('dynamic-1')}}</div>
+
+        <br><br>
+
+        Add <code mode="html">dynamic</code> as an attribute to make an element dynamic.
+        Then, JavaScript codes can be embedded by enclosing it with double curly brackets:
+        <code mode="html"> {{ //YourJSCodeHere }} </code>, and it can be placed anywhere
+        within the element (on the tag or within the children), as many as one heart's desire.
+
+
+        <br><br>Here's another example.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('dynamic-2')}}</div>
+        
+        <br><br>
+
+        It's that simple. <br><br>
+        But then, the samples above were still static. The element and its
+        dependent values were just updated once (as the element was displayed).
+        <br><br>
+        In order to fully grasp the state management capacity of dynamic elements,
+        Sleeve presents a handy object that can handle changes on its value 
+        and automatically update dynamic elements dependent to it.
+
+        <br><br>
+
+        Presenting, the <a href="./state.html">State</a> objects.
+
+
+        
+
+    </content>
+</route>
