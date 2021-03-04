@@ -13,6 +13,7 @@
 
 <title content="title">Sleeve</title>
 
+
 <style>
     .code-preview {
         box-sizing: border-box;
@@ -21,14 +22,22 @@
         background-color: #fff;
         padding: 15px;
     }
+
+    .block-warn {
+        padding: 20px;
+        border-radius: 2px;
+
+        background-color: rgba(255, 0, 0, 0.07);
+    }
 </style>
 
 
 <body class="su-style-classic">
     
+    
     <scaffold>
         <snippet src="../frags/navbar.html" value-toggle-display="initial" value-favicon-url="../favicon_gray.png"></snippet>
-        <sidebar type="sticky" width="350px" transition="slide">
+        <sidebar type="sticky" width="350px" transition="slide" dynamic>
             <a href="./" content-routing><div class="topic-item">Introduction</div></a>
 
             <dropdown expanded>
@@ -50,7 +59,7 @@
             <br>
     
             Hi devs! Sleeve is still in beta. It is a community project where developers
-            can contribute to the project. See the full repository <a href="https://github.com/khiromoshito/sleeve-docs">here</a>.
+            can contribute. See the full repository <a href="https://github.com/khiromoshito/sleeve-docs">here</a>.
     
             <br><br>
             <footer style="display: none; background-color: #a0a0a0; height: 300px; position: relative; width: 100%; box-sizing: border-box;">
@@ -69,9 +78,12 @@
 
 
 <script>
+
     var _preview_codes = {
         "intro-iteration": ["html", `
-&lt;p iterating i-count="100">Item No. {{%i%+1}}&lt;/p>
+&lt;p iterating i-count="100">
+    Item No. {{%i%+1}}
+&lt;/p>
         `, ()=>{
             let el_parent = document.createElement("div");
             let el = SleeveDOM.stringToNode(`<p iterating i-count="100">Item No. {{%i%+1}}</p>`);
@@ -93,17 +105,34 @@
         ],
         "dynamic-2": ["html", `
 &lt;p dynamic>{{num}}&lt;/p>
-&lt;p dynamic>{{num+1}}&lt;/p>
-&lt;p dynamic>{{num==100}}&lt;/p>
+&lt;p style="font-size: {{fontSize}}px" dynamic>A Big Text&lt;/p>
+&lt;p style="font-size: {{fontSize}}px" dynamic>{{num+fontSize}}&lt;/p>
 
 &lt;script>
     var num = 100;
+    var fontSize = 25;
 &lt;/script>
         `, ()=>
             `<p rid="1">100</p>
-             <p rid="2">101</p>
-             <p rid="3">true</p>
+             <p rid="2" style="font-size: 25px">A Big Text</p>
+             <p rid="3" style="font-size: 25px">125</p>
             `
+        ],
+
+        "state-1": ["html", `
+&lt;p dynamic>{{num}}&lt;/p>
+
+&lt;script>
+    var num = new State(0);
+&lt;/script>
+        `,
+        () => {
+            _dummy.num1 = new State(0);
+            let dynamic = SleeveUtils `<p dynamic>{{_dummy.num1}}</p>`;
+            new DynamicElement(dynamic).update();
+
+            return 
+        }
         ]
     };
 

@@ -2,6 +2,7 @@
 
 <route view="../docs_view.html" style="display: none">
     <content name="title">Dynamic Elements</content>
+    <content name="root-dir">../</content>
     <content name="content">
         
         Sleeve was originally based on the concept of 
@@ -40,9 +41,36 @@
 
         <div dynamic>{{showPreviewCode('dynamic-2')}}</div>
         
+        <br><br><br>
+
+        <h5>The JavaScript Way</h5>
+        Manually, you can instantiate a dynamic element with the 
+        <b>Dynamic</b> class, like this one:
+        
         <br><br>
 
+        <block-code mode="js">
+            var dynamicElement = new DynamicElement(element);
+        </block-code>
+
+        <br><br>
+
+        You can then process the element and its script by callingn
+        the <code mode="js">update</code> method.
+
+        <br><br>
+
+        <block-code mode="js">
+            var dynamicElement = new DynamicElement(element);<br>
+            dynamicElement.update();
+        </block-code>
+
+        <br><br>
+
+
+
         It's that simple. <br><br>
+        
         But then, the samples above were still static. The element and its
         dependent values were just updated once (as the element was displayed).
         <br><br>
@@ -52,7 +80,7 @@
 
         <br><br>
 
-        Presenting, the <a href="./state.html">State</a> objects.
+        Presenting, the <a href="state.html">State</a> objects.
 
 
         

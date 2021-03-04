@@ -1,0 +1,104 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">State Class</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        The <b>State Class</b> provides value handling that updates
+        an instance's dependent elements (called <i>listeners</i>) when its value changes.
+
+        <br><br>
+
+        <block-code mode="js">
+// JavaScript<br>
+
+var num = new State(0);
+        </block-code>
+
+        <br><br>
+
+        The constructor <code mode="js">State</code> takes in an argument 
+        <code mode="js">value</code> which serves as an initial or default value,
+        and an optional array argument <code mode="js">listeners</code> that
+        contains the primary list of dependent elements.
+
+        <br><br>
+
+        <h5>With Dynamic Elements</h5>
+
+        When <a href="dynamic.html">Dynamic elements</a> are processed,
+        the embedded JavaScript is checked if a State instance has been used,
+        and if found at least one, the current dynamic element is then added automatically
+        as a listener to the State instance.
+
+
+        <br><br>
+
+        State object values can be updated by calling 
+        <code mode="js">stateObj.update(newValue)</code>. Afterwards, this
+        value change is broadcasted, where all dependent elements
+        are updated corresponding to the new value.
+
+        <br><br>
+
+        Below is an example of a simple incrementor.
+
+        <br><br>
+
+        <tabs stretch default="1">
+            <tab-buttons>
+                <button>PREVIEW</button>
+                <button>CODE</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <p dynamic>{{num}}</p><br><br>
+                    <button onclick="num.update(num.value+1)">INCREMENT</button>
+                    
+                    <script>
+                        var num = new State(0);
+                    </script>
+                </div>
+                <div>
+                    <block-code mode="html">
+&lt;p dynamic>{{num}}&lt;/p>
+&lt;br/>&lt;br/>
+&lt;button onclick="num.update(num.value+1)">INCREMENT&lt;/button>
+
+&lt;script>
+    var num = new State(0);
+&lt;/script>
+                    </block-code>
+                </div>
+            </tab-pages>
+        </tabs>
+
+        <br><br>
+
+        The value of a State object can be retrieved by <code mode="js">stateObj.value</code>.
+
+        <br><br>
+
+        But notice the example above where it used <code mode="js">{{num}}</code>
+        instead of <code mode="js">{{num.value}}</code>? In the case of dynamic elements, 
+        the <b>variable name</b> of the State object itself <b>MUST</b> be used.
+
+        <br><br>
+
+
+
+
+        <br><br>
+        <div class="block-warn">
+            <b>Warning:</b> If the state object is included in the dynamic element 
+                but is <b>not bare</b> (either of <code mode="js">stateObj.someProperty</code>
+                or <code mode="js">something.stateObj</code>), the element <b>will not</b>
+                be automatically added to the State object. 
+
+            <br><br>
+            If inevitable, you can manually add the dynamic element as listener by 
+            <code mode="js">stateObj.addListener(dynamicElement)</code>. Learn more
+            about instantiating dynamic elements <a href="dynamic.html">here</a>.
+        </div>
+    </content>
+</route>
