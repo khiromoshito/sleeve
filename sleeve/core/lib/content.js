@@ -181,6 +181,7 @@ var PageRoute = {
 
 
             let base_url = RouteUtils.sliceUrl(url).basef;
+            console.log("--- url: " + url);
             console.log("--- base url: " + base_url);
 
             // list all content values
@@ -611,8 +612,9 @@ var ResourceLoader = {
 
 var RouteUtils = {
     sliceUrl: (url) => {
-        let protocol_index = url.includes("//") ? url.indexOf("//")+2 : 0;
+        let protocol_index = url.includes("://") ? url.indexOf("://")+3 : 0;
         let protocol = url.slice(0, protocol_index!=0 ? protocol_index : 0);
+
         
         let bare = url.slice(protocol_index);
     
@@ -633,9 +635,9 @@ var RouteUtils = {
             bare_nm.lastIndexOf(".")>bare_nm.lastIndexOf("/") ? 
                 bare_nm.lastIndexOf("/") + 1 : bare_nm.length) : "./";
 
-        let basef = protocol + "//" + base;
+        let basef = protocol + base;
 
-        
+        console.log({basef});
 
         return {protocol, bare, bare_nm, basef, base, domain, pathf, params, fragment};
     },
