@@ -53,7 +53,7 @@ function DynamicElement(element) {
             let exec  = m.replace(/(?:"([^"]|(?<=\\)")*")|(?:'([^']|(?<=\\)')*')/g, "");
 
             // Then, comes search for variables
-            exec.replace(/([\w$_]+[\w\d_]*)/g, m=>{
+            exec.replace(/[\w$_]+[\w\d_]*/g, m=>{
 
                 // Variable is checked if exists
 
@@ -100,7 +100,7 @@ function DynamicElement(element) {
     }
 
     this.scanValues();
-    if(this.checkDoubleDynamic()) this.update();
+    this.checkDoubleDynamic();
 }
 
 window.hasSleeveDynamic = true;
