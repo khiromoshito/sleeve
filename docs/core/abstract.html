@@ -11,14 +11,14 @@
         <br><br>
 
         <block-code mode="html">
-&lt;bluetext abstract>&lt;/bluetext>
+&lt;something abstract>&lt;/something>
         </block-code>
 
         <br><br>
 
-        The code above shows how to create an abstract element <code>bluetext</code>.
+        The code above shows how to create an abstract element <code>something</code>.
         Simply adding the <code>abstract</code> attribute does the trick,
-        and Sleeve automatically registers <code>bluetext</code> as a new HTML tag.
+        and Sleeve automatically registers <code>something</code> as a new HTML tag.
 
         <br><br>
 
@@ -34,27 +34,27 @@
             <tab-pages>
                 <div>
                     <block-code mode="html">
-&lt;bluetext abstract>
-    &lt;p style="color: blue">
+&lt;redtext abstract>
+    &lt;p style="color: red">
         Hello World
     &lt;/p>
-&lt;/bluetext>
+&lt;/redtext>
 
-&lt;bluetext>&lt;/bluetext>
-&lt;bluetext>&lt;/bluetext>
-&lt;bluetext>&lt;/bluetext>
+&lt;redtext>&lt;/redtext>
+&lt;redtext>&lt;/redtext>
+&lt;redtext>&lt;/redtext>
                     </block-code>
                 </div>
                 <div>
-                    <bluetext abstract style="color: blue">    
-                        <p style="color: blue">
+                    <redtext abstract>    
+                        <p style="color: red">
                             Hello World
                         </p>
-                    </bluetext>
+                    </redtext>
 
-                    <bluetext></bluetext>
-                    <bluetext></bluetext>
-                    <bluetext></bluetext>
+                    <redtext></redtext>
+                    <redtext></redtext>
+                    <redtext></redtext>
                 </div>
                 
             </tab-pages>
@@ -209,13 +209,13 @@
     &lt;/span>
 &lt;/bluetext>
 
-&lt;mybutton abstract model="button">
+&lt;mybluebutton abstract model="button">
     &lt;bluetext value-text="%button-text%">&lt;/bluetext>
-&lt;/mybutton>
+&lt;/mybluebutton>
 
 
 
-&lt;mybutton value-button-text="CLICK ME" value-fontsize="20px">&lt;/mybutton>
+&lt;mybluebutton value-button-text="CLICK ME" value-fontsize="20px">&lt;/mybluebutton>
                     </block-code>
                 </div>
                 <div>
@@ -225,13 +225,13 @@
                         </span>
                     </bluetext>
 
-                    <mybutton abstract model="button">
+                    <mybluebutton abstract model="button">
                         <bluetext value-text="%button-text%"></bluetext>
-                    </mybutton>
+                    </mybluebutton>
 
 
 
-                    <mybutton value-button-text="CLICK ME" value-fontsize="20px"></mybutton>
+                    <mybluebutton value-button-text="CLICK ME" value-fontsize="20px"></mybluebutton>
                 </div>
                 
             </tab-pages>
