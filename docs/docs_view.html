@@ -23,6 +23,13 @@
         padding: 15px;
     }
 
+    .block-info {
+        padding: 20px;
+        border-radius: 2px;
+
+        background-color: rgba(10, 180, 200, 0.1);
+    }
+
     .block-warn {
         padding: 20px;
         border-radius: 2px;
@@ -45,6 +52,8 @@
                 <dropdown-items style="padding-left: 15px;">
                     <a href="./core/dynamic.html" content-routing><div class="topic-item">Dynamic Elements</div></a>
                     <a href="./core/state.html" content-routing><div class="topic-item">State Class</div></a>
+                    <a href="./core/iterating.html" content-routing><div class="topic-item">Iterating Elements</div></a>
+                    <a href="./core/referencing.html" content-routing><div class="topic-item">Referencing Elements</div></a>
                 </dropdown-items>
             </dropdown>
             
@@ -134,8 +143,144 @@
 
             return 
         }
-        ]
+        ],
+        "iterate-1": ["html", `
+&lt;p iterating i-count="10">Hello World&lt;/p>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-count="10">Hello World</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return `<div style="height: 300px; overflow-y: scroll">`+el_parent.innerHTML+`</div>`;
+        }],
+        "iterate-2": ["html", `
+&lt;p iterating i-count="10">Current index: %i%&lt;/p>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-count="10">Current index: %i%</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return `<div style="height: 300px; overflow-y: scroll">`+el_parent.innerHTML+`</div>`;
+        }],
+        "iterate-3": ["html", `
+&lt;p iterating i-count="10">
+    Current index + 1 : {{%i%+1}}
+&lt;/p>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-count="10">Current index + 1 : {{%i%+1}}</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return `<div style="height: 300px; overflow-y: scroll">`+el_parent.innerHTML+`</div>`;
+        }],
+        "iterate-4": ["html", `
+&lt;p iterating i-count="5">
+    {{fruits[%i%]}}
+&lt;/p>
+
+&lt;script>
+    var fruits = ["apple", "orange", "banana", "pineapple", "kiwi"];
+&lt;/script>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-count="5">{{fruits[%i%]}}</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return el_parent.innerHTML;
+        }],
+        "iterate-5": ["html", `
+&lt;p iterating i-items="fruit:fruits">
+    %fruit%
+&lt;/p>
+
+&lt;script>
+    var fruits = ["apple", "orange", "banana", "pineapple", "kiwi"];
+&lt;/script>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-items="fruit:fruits">%fruit%</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return el_parent.innerHTML;
+        }],
+        "iterate-6": ["html", `
+&lt;p iterating i-items="fruit:fruits">
+    Fruit No. {{%i%+1}}: %fruit%
+&lt;/p>
+
+&lt;script>
+    var fruits = ["apple", "orange", "banana", "pineapple", "kiwi"];
+&lt;/script>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            let el = SleeveDOM.stringToNode(`<p iterating i-items="fruit:fruits">Fruit No. {{%i%+1}}: %fruit%</p>`);
+
+            el_parent.appendChild(el);
+            new IteratingElement(el).iterate();
+
+            return el_parent.innerHTML;
+        }],
+
+        "referencing-1": ["html", `
+&lt;p id="text" style="color: red">Hello world&lt;/p>
+
+&lt;p ref-id="text">Lorem Ipsum&lt;/p>
+&lt;p ref-id="text">I Love HTML&lt;/p>
+        `, ()=>{
+            let el_parent = document.createElement("div");
+            el_parent.innerHTML = `<p id="text" style="color: red">Hello world</p>
+                <p ref-id="text">Lorem Ipsum</p>
+                <p ref-id="text">I Love HTML</p>
+                `;
+
+            Sleeve.replicateReferencedElements(el_parent);
+            return el_parent.innerHTML;
+        }
+            
+        ],
+        "referencing-2": ["html", `
+&lt;input id="textfield" 
+    type="password" 
+    style="color: blue" 
+    value="password123"
+    placeholder="Password"/>
+
+&lt;input 
+    ref-id="textfield"
+    ref-only="type,style"
+    placeholder="Confirm Password"/>
+        `, ()=> {
+            let el_parent = document.createElement("div");
+            el_parent.innerHTML = `<input id="textfield" 
+                type="password" 
+                style="color: blue" 
+                value="password123"
+                placeholder="Password"/>
+
+            <input 
+                ref-id="textfield" 
+                ref-only="type,style" 
+                placeholder="Confirm Password"/>
+            `;
+
+            Sleeve.replicateReferencedElements(el_parent);
+            return el_parent.innerHTML;
+        }
+            
+        ],
     };
+
+
 
     function showPreviewCode(label) {
         let preview = _preview_codes[label];
@@ -143,19 +288,19 @@
 
 
         return `
-            <tabs stretch default="1">
+            <tabs stretch>
                 <tab-buttons>
-                    <button>PREVIEW</button>
                     <button>CODE</button>
+                    <button>PREVIEW</button>
                 </tab-buttons>
                 <tab-pages>
-                    <div>
-                        `+preview[2]()+`
-                    </div>
                     <div>
                         <block-code mode="`+preview[0]+`">
                             `+preview[1]+`
                         </block-code>
+                    </div>
+                    <div>
+                        `+preview[2]()+`
                     </div>
                 </tab-pages>
             </tabs>

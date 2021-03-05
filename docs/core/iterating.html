@@ -1,0 +1,133 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">Iterating Elements</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        One of Sleeve's power features is scalability. And following upon this
+        are <b>Iterating elements</b>. These are simply elements that can clone 
+        itself corresponding to an index or a list.
+
+        <br><br>
+
+        To make an element iterating, just add the <code mode="html">iterating</code>
+        attribute.
+
+        <br><br>
+        <h5>Clone in Specific Count</h5>
+
+        An iterating element can be cloned given a discrete number of times using the
+        <code mode="html">i-count</code> attribute. Any positive integer (like 1, 7, or 100)
+        can be passed on as a value.
+        
+        
+        For example, below is a code which repeats 
+        <code mode="html">&lt;p>Hello World&lt;/p></code> ten times.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('iterate-1')}}</div>
+
+        <br><br>
+
+        <h5>The Index Variable</h5>
+
+        When the element is being iterated, there is an index that corresponds
+        to the current item (starts with 0). This value can be accessed with
+        the variable placeholder <code>%i%</code>.
+
+        <br><br>
+
+        The snippet below shows how that can be made use.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('iterate-2')}}</div>
+
+        <br><br>
+
+        This can be placed anywhere within the element.
+
+        <br><br>
+
+        <h5>With JavaScript</h5>
+
+        Iterating elements also support JavaScript embedding. Just wrap them inside
+        the double curly brackets: <code mode="js">{{ //JSCode }}</code>.
+
+
+        <br><br>
+
+        The following code, for instance, both uses the index variable <code>%i%</code>
+        and JavaScript to display the index added by 1.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('iterate-3')}}</div>
+
+        <br><br>
+
+        The index variable is first evaluated, and then the JavaScript code is executed.
+
+        <br><br>
+
+        Another one below shows how arrays can be displayed using the two.
+
+        <br><br>
+
+        <script>
+            var fruits = ["apple", "orange", "banana", "pineapple", "kiwi"];
+        </script>
+
+        <div dynamic>{{showPreviewCode('iterate-4')}}</div>
+
+        <br><br>
+
+        <h5>Iterating Lists</h5>
+
+        Using <code>i-count</code> and <code>%i%</code> is best for explicit
+        cloning which does not require reference. But in the case of lists 
+        (aside from the given above), there is a shorthand for handling iterations.
+
+        <br><br>
+
+        The <code>i-items</code> attribute can be used. Its value follows the following format:
+
+        <br><br>
+
+        <code>item : list</code>
+
+        <br><br>
+
+        The <code>item</code> corresponds to the variable name for every iterations (items on the list),
+        and the <code>list</code> represents the array variable itself. <code>item</code> can then be used with a variable placeholder (surrounded with %): 
+        <code>%item%</code>.
+        
+        <br><br>
+        
+        
+        The code above (with the fruits array) can be simply rewritten as:
+
+        <br><br>
+
+
+        <div dynamic>{{showPreviewCode('iterate-5')}}</div>
+
+        <br><br>
+
+        Fortunately, <code>%i%</code> can still be accessed, 
+        and JavaScript embeds work the same way.
+
+        <br><br>
+
+
+        <div dynamic>{{showPreviewCode('iterate-6')}}</div>
+
+        <br><br>
+
+        Just like that.
+
+
+
+    </content>
+</route>

@@ -1,0 +1,65 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">Referencing Elements</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        There might be circumstances when elements have common attributes
+        with no differences. This can be distress when updating all these
+        attributes for every element. And this is where <i>referencing</i> can be applied. 
+
+        <br><br>
+
+        First, pick a reference element where the attributes can be referenced from.
+        Then, if there is none, add an <code>id</code> attribute to it. It can be given
+        any id, so long as it's unique from the rest of the page.
+
+        <br><br>
+
+        <block-code mode="html">&lt;p id="text" stye="color: red">Hello world&lt;/p></block-code>
+
+        <br><br>
+
+        Then, for every items that references to it, just set their <code>ref-id</code>
+        attribute to the id. The snippet below demonstrates that simply.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('referencing-1')}}</div>
+
+        <br><br>
+
+        The two elements then copies <b>all attributes</b> (except the <code>id</code>) 
+        from the reference element...
+
+        <br><br>
+
+        From <code mode="html">&lt;p ref-id="text">Lorem Ipsum&lt;/p></code>, 
+        <br>to <code mode="html">&lt;p style="color: red">Lorem Ipsum&lt;/p></code>
+
+        <br><br>
+
+        <h5>Only Specific Attributes</h5>
+
+        To specify which attributes must only be included, use the <code>ref-only</code>
+        attribute. There, list down the to-copy attributes, separated by comma <code>,</code>.
+
+        <br><br>
+
+        The following code shows how to copy <i>only</i> the <code>style</code> and 
+        <code>type</code> attributes from the <code>input</code> element.
+
+        <br><br>
+
+        <div dynamic>{{showPreviewCode('referencing-2')}}</div>
+
+        <br><br>
+
+        <div class="block-info">
+            <b>NOTE:</b> Referencing elements only account as elements are displayed. Any 
+            further changes of the reference elements afterwards will not take effect
+            on others.
+        </div>
+
+    </content>
+</route>
