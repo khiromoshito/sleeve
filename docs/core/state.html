@@ -47,18 +47,10 @@ var num = new State(0);
 
         <tabs stretch default="1">
             <tab-buttons>
-                <button>PREVIEW</button>
                 <button>CODE</button>
+                <button>PREVIEW</button>
             </tab-buttons>
             <tab-pages>
-                <div>
-                    <p dynamic>{{num}}</p><br><br>
-                    <button onclick="num.update(num.value+1)">INCREMENT</button>
-                    
-                    <script>
-                        var num = new State(0);
-                    </script>
-                </div>
                 <div>
                     <block-code mode="html">
 &lt;p dynamic>{{num}}&lt;/p>
@@ -69,6 +61,14 @@ var num = new State(0);
     var num = new State(0);
 &lt;/script>
                     </block-code>
+                </div>
+                <div>
+                    <p dynamic>{{num}}</p><br><br>
+                    <button onclick="num.update(num.value+1)">INCREMENT</button>
+                    
+                    <script>
+                        var num = new State(0);
+                    </script>
                 </div>
             </tab-pages>
         </tabs>

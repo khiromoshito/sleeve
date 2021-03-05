@@ -1,0 +1,100 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">Snippets</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        Take a look at this code:
+
+        <br><br>
+
+        <block-code mode="html">&lt;snippet src="other.html">&lt;/snippet></block-code>
+
+        <br><br>
+
+        It simply imports <code>other.html</code> right there, <i>directly</i>. No iframes. No embeds. Simply, <b>Snippets</b>.
+
+        <br><br>
+
+        And in case only specific elements are needed, there are two ways to do so.
+        
+        <br><br>
+
+        <h5>1. With an id</h5>
+
+        Specify a desired element by setting the snippet's <code>snip-id</code> attribute
+        to the id.
+
+
+        <block-code mode="html">&lt;snippet src="other.html" snip-id="mytext">&lt;/snippet></block-code>
+
+        <br><br>
+
+        The snippet above shall only display the element in <code>other.html</code> that has
+        an id <code>mytext</code>.
+
+        <br><br>
+
+        <h5>2. With a CSS Selector</h5>
+
+        Also, CSS Selectors (just like the ones used in querySelector) can be used for picking
+        specific elements. Just set the <code>selector</code> attribute to the selector.
+
+        <br><br>
+        
+        The example below shall display all <code>span</code> elements from <code>other.html</code>
+        
+        <br><br>
+
+        <block-code mode="html">&lt;snippet src="other.html" selector="span">&lt;/snippet></block-code>
+
+        <br><br>
+
+        <h5>Snippet Variables</h5>
+
+        Snippets has support for variables as well.<br><br>
+
+        These variables are enclosed by percent symbols: <code>%variableName%</code>,
+        which is placed anywhere inside the target file 
+        (at the example above, <code>other.html</code>).
+
+        <br><br>
+
+        These variables can then be substituted with specific values by
+        adding the <code>value-variableName</code> attribute to the 
+        snippet element, with its value as the variable's value.
+
+        <br><br>
+
+        For example, with an attribute <code>value-text="Hello World"</code>,
+        all <code>%text%</code> in the target file are substituted to <i>Hello World</i>.
+
+        <br><br>
+
+        <tabs stretch>
+            <tab-buttons>
+                <button>CODE</button>
+                <button>FILE: other.html</button>
+                <button>PREVIEW</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <block-code mode="html">
+&lt;snippet src="other.html" selector="span" value-text="Hello World">&lt;/snippet>
+                    </block-code>
+                </div>
+                <div>
+                    <block-code mode="html">
+&lt;span style="color: blue">%text%&lt;/span>
+                    </block-code>
+                </div>
+                <div>
+                    <span style="color: blue">Hello World</span>
+                </div>
+                
+            </tab-pages>
+        </tabs>
+        
+
+    </content>
+</route>

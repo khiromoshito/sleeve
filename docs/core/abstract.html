@@ -1,0 +1,248 @@
+<script src="../../sleeve/core/lib/route.js"></script>
+
+<route view="../docs_view.html" style="display: none">
+    <content name="title">Abstract Elements</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        The <b>Abstract Elements</b> provide templating and creating reusable
+        components for web pages, all under a custom HTML tag. This is one
+        step further for semantics.
+
+        <br><br>
+
+        <block-code mode="html">
+&lt;bluetext abstract>&lt;/bluetext>
+        </block-code>
+
+        <br><br>
+
+        The code above shows how to create an abstract element <code>bluetext</code>.
+        Simply adding the <code>abstract</code> attribute does the trick,
+        and Sleeve automatically registers <code>bluetext</code> as a new HTML tag.
+
+        <br><br>
+
+        An instance can then be created just like a normal HTML tag. 
+
+        <br><br>
+
+        <tabs stretch>
+            <tab-buttons>
+                <button>CODE</button>
+                <button>PREVIEW</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <block-code mode="html">
+&lt;bluetext abstract>
+    &lt;p style="color: blue">
+        Hello World
+    &lt;/p>
+&lt;/bluetext>
+
+&lt;bluetext>&lt;/bluetext>
+&lt;bluetext>&lt;/bluetext>
+&lt;bluetext>&lt;/bluetext>
+                    </block-code>
+                </div>
+                <div>
+                    <bluetext abstract style="color: blue">    
+                        <p style="color: blue">
+                            Hello World
+                        </p>
+                    </bluetext>
+
+                    <bluetext></bluetext>
+                    <bluetext></bluetext>
+                    <bluetext></bluetext>
+                </div>
+                
+            </tab-pages>
+        </tabs>
+
+        <br><br>
+
+        <div class="block-warn">
+            <b>Warning:</b> In naming abstract elements, only <b>letters</b>, <b>digits <i>(0-9)</i></b>, 
+            <b>underscores<i>(_)</i></b> and <b>dashes <i>(-)</i></b> are allowed.
+        </div>
+
+        <br><br>
+
+        <h5>With Variables</h5>
+
+        Abstract elements can have variables. In creating one, just put them between
+        percent signs, like this: <code>%variableName%</code>. They can be present anywhere
+        in the abstract element, and can be of any count.
+
+        <br><br>
+
+        The instance element can then set values for the variable by adding this attribute:
+
+        <br><br>
+
+        <code>value-variableName</code>
+
+        <br><br>
+
+        The <code>value-</code> is constant, so it will be the prefix for each variable setting.
+        This is then followed by the variable name. The example below applies this.
+
+
+        <br><br>
+
+        <tabs stretch>
+            <tab-buttons>
+                <button>CODE</button>
+                <button>PREVIEW</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <block-code mode="html">
+&lt;bluetext abstract>
+    &lt;p style="color: blue; font-size: %fontsize%">
+        %text%
+    &lt;/p>
+&lt;/bluetext>
+
+&lt;bluetext value-text="Hello World" value-fontsize="10px">&lt;/bluetext>
+&lt;bluetext value-text="Lorem Ipsum" value-fontsize="20px">&lt;/bluetext>
+                    </block-code>
+                </div>
+                <div>
+                    <bluetext abstract style="color: blue">    
+                        <p style="color: blue; font-size: %fontsize%">
+                            %text%
+                        </p>
+                    </bluetext>
+
+                    <bluetext value-text="Hello World" value-fontsize="10px"></bluetext>
+                    <bluetext value-text="Lorem Ipsum" value-fontsize="20px"></bluetext>
+                </div>
+                
+            </tab-pages>
+        </tabs>
+
+        <br><br>
+
+        <div class="block-warn">
+            <b>Warning:</b> In naming variables, only <b>letters</b>, <b>digits <i>(0-9)</i></b>, 
+            <b>underscores<i>(_)</i></b> and <b>dashes <i>(-)</i></b> are allowed.
+        </div>
+
+        <br><br>
+
+        <h5>Using Models</h5>
+
+        An instance of abstract elements are formed with a model as the root element of the
+        element. When an abstract element only has one child, then that child becomes the model.
+        Otherwise, if there are no children or there are more than one, then it uses <code>div</code>
+        by default.
+
+        <br><br>
+
+        Using models can also be identified as extending existing HTML elements. For example,
+        having <code>input</code> as a model element means the abstract element represents
+        an input element.
+
+        <br><br>
+
+        To configure the model, add the <code>model</code> attribute, 
+        set to the specific model element. This code, for example, creates
+        a button abstract element.
+        
+        <br><br>
+
+        <tabs stretch>
+            <tab-buttons>
+                <button>CODE</button>
+                <button>PREVIEW</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <block-code mode="html">
+&lt;mybutton abstract model="button">
+    %button-text%
+&lt;/mybutton>
+
+&lt;mybutton value-button-text="CLICK ME">&lt;/mybutton>
+                    </block-code>
+                </div>
+                <div>
+                    <mybutton abstract model="button">
+                        %button-text%
+                    </mybutton>
+
+                    <mybutton value-button-text="CLICK ME"></mybutton>
+                </div>
+                
+            </tab-pages>
+        </tabs>
+
+
+
+        <br><br>
+        When the model for an abstract element is set, automatically, the children of the abstract
+        element becomes the children of the model element.
+
+        <br><br><br>
+
+
+        <h5>Abstracts inside Abstracts</h5>
+
+        Also, abstract elements can be nested inside other abstract elements, too. The snippet below 
+        mixes the two examples above.
+
+        <br><br>
+
+        <tabs stretch>
+            <tab-buttons>
+                <button>CODE</button>
+                <button>PREVIEW</button>
+            </tab-buttons>
+            <tab-pages>
+                <div>
+                    <block-code mode="html">
+&lt;bluetext abstract>
+    &lt;span style="color: blue; font-size: %fontsize%">
+        %text%
+    &lt;/span>
+&lt;/bluetext>
+
+&lt;mybutton abstract model="button">
+    &lt;bluetext value-text="%button-text%">&lt;/bluetext>
+&lt;/mybutton>
+
+
+
+&lt;mybutton value-button-text="CLICK ME" value-fontsize="20px">&lt;/mybutton>
+                    </block-code>
+                </div>
+                <div>
+                    <bluetext abstract>
+                        <span style="color: blue; font-size: %fontsize%">
+                            %text%
+                        </span>
+                    </bluetext>
+
+                    <mybutton abstract model="button">
+                        <bluetext value-text="%button-text%"></bluetext>
+                    </mybutton>
+
+
+
+                    <mybutton value-button-text="CLICK ME" value-fontsize="20px"></mybutton>
+                </div>
+                
+            </tab-pages>
+        </tabs>
+
+        <br><br>
+        Cool.
+
+        <br><br>
+
+
+
+    </content>
+</route>
