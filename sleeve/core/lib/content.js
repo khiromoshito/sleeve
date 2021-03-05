@@ -61,7 +61,7 @@ var ContentHandler = {
             let content_name = el.getAttribute("content");
             let content_value = ContentHandler.get(content_name);
 
-            if(content_value) el.innerHTML = content_value;
+            if(content_value!=null && content_value!==undefined) el.innerHTML = content_value;
 
             
         });
