@@ -73,14 +73,7 @@ var Sleeve = {
                 let content = SleeveAPI.fetchText(snippet_src, (content) => {
 
 
-                    SleeveUtils.toArray(el.attributes).forEach(attr=>{
-                        if(attr.name.startsWith("value-")) {
-                            let value_name = attr.name.slice(6);
-                            let value = attr.value;
-
-                            content = content.replaceAll("%"+value_name+"%", value);
-                        }
-                    });
+                    
 
                     let content_node = SleeveDOM.wrapAll(SleeveDOM.stringToNodeList(content));
 
@@ -100,7 +93,14 @@ var Sleeve = {
 
 
 
+                    SleeveUtils.toArray(el.attributes).forEach(attr=>{
+                        if(attr.name.startsWith("value-")) {
+                            let value_name = attr.name.slice(6);
+                            let value = attr.value;
 
+                            content_node.innerHTML = content_node.innerHTML.replaceAll("%"+value_name+"%", value);
+                        }
+                    });
                 
                 
                 
