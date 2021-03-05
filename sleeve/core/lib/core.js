@@ -204,7 +204,7 @@ var Sleeve = {
     replicateReferencedElements: (root = document) => {
         let referenced_elements = root.querySelectorAll("[ref-id]");
         referenced_elements.forEach(el=>{
-            let reference = root.getElementById(el.getAttribute("ref-id"));
+            let reference = root.querySelector("#"+el.getAttribute("ref-id"));
             if(reference) {
                 let reference_attributes = SleeveUtils.toArray(reference.attributes);
                 let replicatable_attributes = null;
@@ -413,9 +413,9 @@ function State(value, listeners = []) {
         this.listeners = this.listeners.filter(l=>l!=null);
     };
 
-    this.addListener = (listenerId) => {
+    this.addListener = (listener) => {
         //console.log("(STATE): Added listener");
-        this.listeners.push(listenerId);
+        this.listeners.push(listener);
     };
 
     this.toString = () => this.value;
