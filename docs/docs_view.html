@@ -16,6 +16,11 @@
 
 
 <style>
+
+    .su-sidebar {
+        padding: 15px;
+    }
+
     .code-preview {
         box-sizing: border-box;
         border: 1px solid gray;
@@ -37,6 +42,23 @@
 
         background-color: rgba(255, 0, 0, 0.07);
     }
+
+    .topic-item {
+        box-sizing: border-box;
+        padding: 8px 12px;
+
+        text-decoration: none;
+        display: block;
+        color: rgba(0, 0, 0, 0.85);
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .topic-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+
+        text-decoration: none;
+    }
 </style>
 
 
@@ -46,28 +68,31 @@
     <scaffold>
         <snippet src="../frags/navbar.html" value-toggle-display="initial" value-favicon-url="../favicon_gray.png"></snippet>
         <sidebar type="sticky" width="350px" transition="slide" dynamic>
-            <a href="./" content-routing><div class="topic-item">Introduction</div></a>
+            <a href="./" content-routing class="topic-item">Introduction</a>
 
             <dropdown expanded>
-                <dropdown-button>Core<dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
+                <dropdown-button class="topic-item">
+                    Core
+                    <dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
                 <dropdown-items style="padding-left: 15px;">
-                    <a href="./core/dynamic.html" content-routing><div class="topic-item">Dynamic Elements</div></a>
-                    <a href="./core/state.html" content-routing><div class="topic-item">State Class</div></a>
-                    <a href="./core/iterating.html" content-routing><div class="topic-item">Iterating Elements</div></a>
-                    <a href="./core/referencing.html" content-routing><div class="topic-item">Referencing Elements</div></a>
-                    <a href="./core/abstract.html" content-routing><div class="topic-item">Abstract Elements</div></a>
-                    <a href="./core/snippets.html" content-routing><div class="topic-item">Snippets</div></a>
+                    <a href="./core/dynamic.html" content-routing class="topic-item">Dynamic Elements</a>
+                    <a href="./core/state.html" content-routing class="topic-item">State Class</a>
+                    <a href="./core/iterating.html" content-routing class="topic-item">Iterating Elements</a>
+                    <a href="./core/referencing.html" content-routing class="topic-item">Referencing Elements</a>
+                    <a href="./core/abstract.html" content-routing class="topic-item">Abstract Elements</a>
+                    <a href="./core/snippets.html" content-routing class="topic-item">Snippets</a>
                 
                     
                 </dropdown-items>
             </dropdown>
 
             <dropdown expanded>
-                <dropdown-button>
-                    Core APIs <dropdown-icon type="arrow"></dropdown-icon>
+                <dropdown-button class="topic-item">
+                    Core APIs
+                    <dropdown-icon type="arrow"></dropdown-icon>
                 </dropdown-button>
                 <dropdown-items style="padding-left: 15px;">
-                    <a href="./core/api/content-handler.html" content-routing><div class="topic-item">ContentHandler</div></a>
+                    <a href="./core/api/content-handler.html" content-routing class="topic-item">ContentHandler</a>
                 </dropdown-items>
             </dropdown>
             
