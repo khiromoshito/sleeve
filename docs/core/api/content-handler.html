@@ -4,6 +4,190 @@
     <content name="title">ContentHandler API</content>
     <content name="root-dir">../</content>
     <content name="content">
-        ...
+        The <b>ContentHandler</b> API manages content display in simple terms.
+        Suppose there is a page that can show different content without
+        changes in the layout, this API can be used to change the content easily.
+
+        <br><br>
+
+        <i>JavaScript Object Notation (JSON)</i> or simply JS Objects are used for configuring 
+        content values, something that looks like this:
+
+        <br><br>
+
+        <block-code mode="js">
+{
+    title: "The Lorem Ipsum",
+    author: "John Doe",
+    date: "March 2021",
+    article: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec feugiat augue. Vestibulum sit amet quam dui. Donec vitae turpis nec enim malesuada laoreet id vitae orci. Fusce nec ligula in tortor semper commodo. Duis nec leo sit amet justo suscipit condimentum sit amet eu mauris. Suspendisse potenti. Pellentesque imperdiet tincidunt blandit."
+}
+        </block-code>
+
+        <br><br>
+
+        This JSON example will be used throughout the page.
+
+        <br><br>
+
+
+        <h5>1. Setting Up HTML</h5>
+
+        To integrate content-handling for elements (such as div and paragraph),
+        add the <code>content</code> attribute with its value set to the 
+        name of the content. 
+
+        <br><br>
+
+        <block-code mode="html">
+&lt;h3 content="title">&lt;/h3>
+&lt;span content="author">&lt;/span> &bullet;
+&lt;span content="date">&lt;/span>
+&lt;br/>
+&lt;span content="article">&lt;/span>
+        </block-code>
+
+        <br><br>
+
+        The HTML snippet above shows a simple article with title, author, date and 
+        article body that will be holding the content values later.
+
+        <br><br>
+
+        <h5>2. Configuring the Content</h5>
+
+        Now that the HTML is ready, all that's needed is to set the content.
+        Taking the JSON example earlier, the content can be easily set by the
+        <code>setContent</code> method which accepts the JSON object as argument.
+
+        <br><br>
+
+        <block-code mode="js">
+// JavaScript
+
+ContentHandler.setContent({
+    title: "The Lorem Ipsum",
+    author: "John Doe",
+    date: "March 2021",
+    article: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec feugiat augue. Vestibulum sit amet quam dui. Donec vitae turpis nec enim malesuada laoreet id vitae orci. Fusce nec ligula in tortor semper commodo. Duis nec leo sit amet justo suscipit condimentum sit amet eu mauris. Suspendisse potenti. Pellentesque imperdiet tincidunt blandit."
+});
+        </block-code>
+
+        <br><br>
+
+        And <i>voila</i>! The HTML is then updated with the corresponding values, which would look
+        something like this:
+
+        <br><br>
+
+        <div class="code-preview">
+            <h3 content="title">The Lorem Ipsum</h3>
+            <span content="author">John Doe</span> &bullet;
+            <span content="date">March 2021</span>
+            <br/>
+            <span content="article">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec feugiat augue. Vestibulum sit amet quam dui. Donec vitae turpis nec enim malesuada laoreet id vitae orci. Fusce nec ligula in tortor semper commodo. Duis nec leo sit amet justo suscipit condimentum sit amet eu mauris. Suspendisse potenti. Pellentesque imperdiet tincidunt blandit.</span>
+        </div>
+
+        <br><br>
+
+        The <code>setContent</code> method can be called multiple times each 
+        time the content needs to change. No more of the DOM hassle.
+
+        <br><br>
+
+        <h5>From JSON Files</h5>
+
+        ContentHandler also supports displaying content from JSON files with the
+        <code>setContentFromJSONUrl</code>, where the URL of the JSON file can be passed.
+
+        <br><br>
+
+        <block-code>
+ContentHandler.setContentFromJSONUrl("mydata.json");
+        </block-code>
+
+        <br><br>
+
+        <div class="block-warn">
+            <b>Warning:</b> The JSON object must follow the key-value entities format,
+            where the root must be in curly braces <code>{ }</code> and inside 
+            contains the key-value pairs <code>"key": "value"</code> separated
+            by commas <code>,</code>.
+            <br><br>
+            <block-code mode="js">
+{
+    "key1": "value1",
+    "name": "John Doe",
+    "age": 23,
+    "isSingle": true
+}
+            </block-code>
+
+        </div>
+
+        <br><br>
+
+        <hr>
+
+        <br>
+
+
+        <script>
+            var _contenthandler_properties = [
+                [   "_content",
+                    "<i>[Setter & Getter]</i>&nbsp; The object that contains the name-value pairs of the page content",
+                ],
+            ];
+
+            var _contenthandler_methods = [
+                
+                [   "clear()",
+                    "Clears all content and turns them blank.",
+                ],
+
+                [   "set(name, value)",
+                    "Sets a single content.",
+                    [
+                        "name", ["string"], "Name of content, like <code>title</code> or <code>author</code>",
+                        "value", ["string"], "Content value, like <code>The Lorem Ipsum</code> or <code>John Doe</code>"
+                    ]
+                ],
+
+                [   "setContent(content)",
+                    "Sets the content values for the page.",
+                    ["content", ["Object"], "JSON or JS object which contains the name-value pairs for each content"]
+                ],
+
+                [   "setContentFromJSONUrl(url)",
+                    "Sets the content values for the page from a JSON file.",
+                    ["url", ["string"], "The URL for the JSON file to which contains the name-value pairs for each content"]
+                ],
+
+            ];
+
+
+        </script>
+
+
+        <h5>Properties</h5>
+
+        <div style="margin-top: 25px;" iterating i-count="{{_contenthandler_properties.length}}">
+            <code>{{_contenthandler_properties[%i%][0]}}</code>
+            <p style="margin-left: 15px; margin-top: 3px;">
+                {{_contenthandler_properties[%i%][1]}}
+            </p>
+        </div>
+
+        <br><br>
+
+        <h5>Methods</h5>
+
+        <div style="margin-top: 25px;" iterating i-count="{{_contenthandler_methods.length}}">
+            <code>{{_contenthandler_methods[%i%][0]}}</code>
+            <p style="margin-left: 15px; margin-top: 3px;">
+                {{_contenthandler_methods[%i%][1]}}
+            </p>
+        </div>
+        
     </content>
 </route>
