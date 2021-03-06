@@ -67,34 +67,65 @@
     
     <scaffold>
         <snippet src="../frags/navbar.html" value-toggle-display="initial" value-favicon-url="../favicon_gray.png"></snippet>
-        <sidebar type="sticky" width="350px" transition="slide" dynamic>
+        <sidebar type="sticky" width="350px" transition="slide">
             <a href="./" content-routing class="topic-item">Introduction</a>
+            <dropdown expanded>
+                <dropdown-button class="topic-item">
+                    Sleeve CORE
+                    <dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
+                <dropdown-items style="padding-left: 15px;">
+
+                    <dropdown expanded>
+                        <dropdown-button class="topic-item">
+                            DOM Manipulations
+                            <dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
+                        <dropdown-items style="padding-left: 15px;">
+                            <a href="./core/dynamic.html" content-routing class="topic-item">Dynamic Elements</a>
+                            <a href="./core/state.html" content-routing class="topic-item">State Class</a>
+                            <a href="./core/iterating.html" content-routing class="topic-item">Iterating Elements</a>
+                            <a href="./core/referencing.html" content-routing class="topic-item">Referencing Elements</a>
+                            <a href="./core/abstract.html" content-routing class="topic-item">Abstract Elements</a>
+                            <a href="./core/snippets.html" content-routing class="topic-item">Snippets</a>
+                        
+                            
+                        </dropdown-items>
+                    </dropdown>
+
+                    <dropdown expanded>
+                        <dropdown-button class="topic-item">
+                            Routing
+                            <dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
+                        <dropdown-items style="padding-left: 15px;">
+                            <a href="./core/dynamic.html" content-routing class="topic-item">Routes</a>
+                        
+                            
+                        </dropdown-items>
+                    </dropdown>
+
+                    <dropdown expanded>
+                        <dropdown-button class="topic-item">
+                            Core APIs
+                            <dropdown-icon type="arrow"></dropdown-icon>
+                        </dropdown-button>
+                        <dropdown-items style="padding-left: 15px;">
+                            <a href="./core/api/content-handler.html" content-routing class="topic-item">ContentHandler</a>
+                        </dropdown-items>
+                    </dropdown>
+                </dropdown-items>
+            </dropdown>
 
             <dropdown expanded>
                 <dropdown-button class="topic-item">
-                    Core
+                    Sleeve-Suit (UI)
                     <dropdown-icon type="arrow"></dropdown-icon></dropdown-button>
                 <dropdown-items style="padding-left: 15px;">
-                    <a href="./core/dynamic.html" content-routing class="topic-item">Dynamic Elements</a>
-                    <a href="./core/state.html" content-routing class="topic-item">State Class</a>
-                    <a href="./core/iterating.html" content-routing class="topic-item">Iterating Elements</a>
-                    <a href="./core/referencing.html" content-routing class="topic-item">Referencing Elements</a>
-                    <a href="./core/abstract.html" content-routing class="topic-item">Abstract Elements</a>
-                    <a href="./core/snippets.html" content-routing class="topic-item">Snippets</a>
+                    <a href="./core/dynamic.html" content-routing class="topic-item">Routes</a>
                 
                     
                 </dropdown-items>
             </dropdown>
 
-            <dropdown expanded>
-                <dropdown-button class="topic-item">
-                    Core APIs
-                    <dropdown-icon type="arrow"></dropdown-icon>
-                </dropdown-button>
-                <dropdown-items style="padding-left: 15px;">
-                    <a href="./core/api/content-handler.html" content-routing class="topic-item">ContentHandler</a>
-                </dropdown-items>
-            </dropdown>
+
             
         </sidebar>
         <main>
@@ -345,5 +376,6 @@
             </tabs>
         `;
     }
+
 </script>
 <script src="../scripts/loader.js"></script>
