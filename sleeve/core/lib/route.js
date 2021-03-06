@@ -79,7 +79,7 @@ function processRoute() {
                 });
             }); 
 
-            console.log(temp.innerHTML);
+            //console.log(temp.innerHTML);
             document.write(temp.innerHTML);
             document.close();
 

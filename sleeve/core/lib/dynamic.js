@@ -40,7 +40,7 @@ function DynamicElement(element) {
         // Iterate through executables {{...}}
 
         element_string = element_string.replace(/\{\{([^}]|(?<!\})\})*\}\}/g, m=>{
-            console.log(m);
+            //console.log(m);
             // Variables are searched and checked for any State objects.
             // If found any, this dynamic element is then registered
             // to the corresponding state objects
@@ -83,7 +83,6 @@ function DynamicElement(element) {
                 return false;
             }
         }
-        console.time("Dynamic element update time");
         let element_string = SleeveDOM.nodeToString(this.reference_element);
         element_string = element_string.replace(/\{\{([^}]|(?<!\})\})*\}\}/g, m=>{
             return eval(m.slice(1,-1));
@@ -95,7 +94,6 @@ function DynamicElement(element) {
         this.target_element = parsed_element;
 
         if(!this.isClean) this.clean();
-        console.timeEnd("Dynamic element update time");
         return true;
     }
 

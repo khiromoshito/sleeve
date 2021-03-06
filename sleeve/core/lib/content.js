@@ -163,6 +163,7 @@ var PageRoute = {
 
     toContentRoute: (url, callback = () => {}, thenState = () => {}) => {
         console.clear();
+        console.log("Content routing...");
         PageRoute.onRoutingStart(url);
         PageRoute.onRoutingProgress(url, 0.4);
 
@@ -214,6 +215,7 @@ var PageRoute = {
 
             
             if(window.hasSleeve) Sleeve.initialise();
+            if(window.hasSuit) Suit.initialise();
             callback();
 
 
@@ -271,6 +273,9 @@ var PageRoute = {
             thenState();
 
             console.clear();
+
+            console.log("Page routing...");
+
             let temp_page = document.createElement("html");
             temp_page.innerHTML = route_data;
 
