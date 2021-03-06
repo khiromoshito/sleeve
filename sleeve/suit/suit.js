@@ -228,7 +228,6 @@ var Suit = {
                 }
                 
                 Array.prototype.slice.call(el.attributes).forEach(attr=>{
-                    console.log(attr.name);
                     if(attr.name=="class")
                         new_element.setAttribute("class", attr.value + " " + final_class);
                     else 
@@ -244,8 +243,9 @@ var Suit = {
 
 
                 new_element.removeAttribute("type");
+
+                new_element.append(...Array.prototype.slice.call(el.childNodes));
                 
-                new_element.innerHTML = el.innerHTML;
 
                 el.parentElement.replaceChild(new_element, el);
             });
@@ -882,7 +882,11 @@ window.addEventListener("DOMContentLoaded", function(){
         console.log("HAS SLEEVE");
         if(Sleeve.isPrepared) 
             Suit.initialise();
-        else Sleeve.onPrepared = ()=> Suit.initialise();
+        else Sleeve.onPrepared = ()=> {
+            Sleeve.onPrepared = ()=>{};
+            Suit.initialise();
+        
+        }
     } else {
         Suit.initialise();
     }
@@ -959,7 +963,6 @@ function sidebar(element, toVisible) {
 
 
 function dropdown(element) {
-    if(element.hasClass("su-dropdown-btn")) {
         console.time("Dropdown time");
         let parent_element = element.parentElement;
 
@@ -1048,7 +1051,7 @@ function dropdown(element) {
         }
 
         console.timeEnd("Dropdown time");
-    }
+    
 }
 
 
