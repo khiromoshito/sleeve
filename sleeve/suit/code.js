@@ -129,7 +129,7 @@ var CodeFormatter = {
     formatJS: (raw_string) => {
         let formatted = raw_string;
         
-
+        formatted = formatted.replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
         return formatted;
 
 
