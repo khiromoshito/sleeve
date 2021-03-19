@@ -1,0 +1,101 @@
+<script src="../../../sleeve/core/lib/route.js"></script>
+
+<route view="../../docs_view.html" style="display: none">
+    <content name="title">Routes</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        In Sleeve, <b>Routes</b> are simply pages. But they are treated as different 
+        states of one display. That means that with one initial page, Sleeve can
+        host page navigation without reloading.
+
+        <br><br>
+
+        Sleeve supports two types of routing:
+        <br><br>
+        <div responsive style="display: flex; margin: {{R(0,20,25)}}px; flex-direction: {{R('column', 'column', 'row')}};">
+            <div style="flex: 1; margin: 25px">
+                <strong><a href="./page-routing.html">Page Routing</a></strong><br>
+                Page navigation into a completely different page <i>(different layout, different path)</i>.
+            </div>
+            <div style="flex: 1; margin: 25px">
+                <strong><a href="./content-routing.html">Content Routing</a></strong><br>
+                One single root view with content navigation <i>(common layout, different content, different path)</i>.
+            </div>
+        </div>
+
+        <br><br>
+
+        One demonstration for routing is this documentation itself. All pages in this documentation, from 
+        <a href="../../">Introduction</a> to the last item, all of it runs with content routing.
+        Whereas the navigation from the <a href="../../../">Home page</a> to <a href="../../">Introduction</a>
+        uses page routing.
+
+        <br><br>
+
+        The usage of routes provide more control to navigation. Sleeve's 
+        <a href="../api/router.html">Router</a> API has a page loading listener
+        where a callback can be set once pages are on navigation, returning
+        the percentages (in 0 - 1) for progress bars.
+
+        <br><br>
+
+        <h5>How They Work</h5>
+
+        When navigating through a route with <code>Routes.toRoute(url)</code>,
+        these are the steps that the method takes:
+
+        <br><br>
+        <div style="padding-left: 30px">
+            <b>1. Fetching the page</b>
+            <br>First of all, the target page itself is being loaded.
+            It is checked if the page has been already loaded before
+            or is <a href="preloading.html">preloaded</a> beforehand.
+            When ready, the plain text content is converted to HTML.
+
+            <br><br>
+
+            <b>2. Relocating paths (<a href="content-routing.html">Content Routing</a>) </b>
+            <br>
+            All links on the target page, from href to src, are being relocated
+            according to the view page location.
+
+            <br><br>
+
+            <b>3. Preloading external resources</b>
+
+            <br>
+            Every external resources (external scripts, view page, and external suit-styles)
+            are loaded, and replaced to the target page as local resources.
+
+            <br><br>
+
+            <b>4. Displaying the route</b>
+
+            <br>
+            And finally, the route is displayed, depending on whether it is
+            by Page Routing (whole page is rewritten) or Content Routing 
+            (uses <a href="../api/content-handler.html">ContentHandler</a> to update content).
+        </div>
+        <br><br>
+
+        These steps are divided into segments where listeners can be set for buffering
+        purposes. <a href="progress.html">This page</a> demonstrates how to 
+        set up progress bars for routing.
+
+        <br><br>
+        
+        <h5>Routing Limitations</h5>
+        
+        Obviously, routing only works with paths of the same domain. It means that
+        this would only work if the target page is under the same website.
+
+        <br><br><br>
+
+        Learn more about routing from these links:
+        <ul>
+            <li><a href="./page-routing.html">Page Routing</a></li>
+            <li><a href="./content-routing.html">Content Routing</a></li>
+            <li><a href="../api/router.html">Router API</a></li>
+        </ul>
+    </content>
+</route>

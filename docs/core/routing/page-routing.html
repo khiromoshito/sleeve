@@ -1,0 +1,31 @@
+<script src="../../../sleeve/core/lib/route.js"></script>
+
+<route view="../../docs_view.html" style="display: none">
+    <content name="title">Page Routing</content>
+    <content name="root-dir">../</content>
+    <content name="content">
+        <b>Page Routing</b> is used for navigating to a different page without
+        reloading the current tab.
+
+        <br><br>
+
+        To enable, add the <code>page-routing</code> attribute to the anchor element.
+
+        <br><br>
+
+        <block-code mode="html">
+&lt;a href="somepage.html" page-routing>Go there&lt;/a>
+        </block-code>
+
+        <br><br>
+
+        When the link is clicked, Sleeve then takes the target <code>somepage.html</code>,
+        updates the location, and displays the page in the same display without reloading.
+
+
+        <br><br><br>
+
+        Learn more about routes in Sleeve and other ways to routing <a href="./routes.html">here</a></li>.
+
+    </content>
+</route>

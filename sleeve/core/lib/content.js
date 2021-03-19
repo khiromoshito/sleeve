@@ -89,9 +89,9 @@ var ContentHandler = {
 
 
 
-var _past_route_mode = PageRoute ? PageRoute._current_route_mode : (history.state ? history.state.route_mode : null);
+var _past_route_mode = Router ? Router._current_route_mode : (history.state ? history.state.route_mode : null);
 
-var PageRoute = {
+var Router = {
 
     _current_location: window.location.href,
     _current_route_mode: _past_route_mode,
@@ -127,7 +127,7 @@ var PageRoute = {
                 ContentHandler.setContent(content);
             };
 
-            if(PageRoute.isWindowLoaded)
+            if(Router.isWindowLoaded)
                 when_loaded();
             else 
                 window.addEventListener("load", when_loaded);
@@ -142,30 +142,30 @@ var PageRoute = {
 
 
     toRoute: (url, state = {}) => {
-        PageRoute.onRoutingStart(url);
+        Router.onRoutingStart(url);
         fetch(url).
         then(res=>res.text()
         .then(res=>{
             console.log(res);
-            PageRoute.onRoutingSuccess(url);
+            Router.onRoutingSuccess(url);
 
             history.pushState(state, "", url);
             document.write(res);
         }).catch(e=>{
             console.log("Error loading page: " + e);
-            PageRoute.onRoutingError(url, e);
+            Router.onRoutingError(url, e);
         }))
         .catch(e=>{
             console.log("Error processing page: " + e);
-            PageRoute.onRoutingError(url, e);
+            Router.onRoutingError(url, e);
         });
     },
 
     toContentRoute: (url, callback = () => {}, thenState = () => {}) => {
         console.clear();
         console.log("Content routing...");
-        PageRoute.onRoutingStart(url);
-        PageRoute.onRoutingProgress(url, 0.4);
+        Router.onRoutingStart(url);
+        Router.onRoutingProgress(url, 0.4);
 
         let route_data = null;
 
@@ -173,7 +173,7 @@ var PageRoute = {
         let processRoute = () => {
             thenState();
             //console.log(res);
-            PageRoute.onRoutingProgress(url, 0.8);
+            Router.onRoutingProgress(url, 0.8);
 
             if(history.state)
                 history.replaceState({...history.state, route_data: route_data, route_src: url}, "");
@@ -191,7 +191,7 @@ var PageRoute = {
             let temp = document.createElement("html");
             temp.innerHTML = route_data;
 
-            PageRoute.relocatePaths(temp, base_url);
+            Router.relocatePaths(temp, base_url);
 
 
             temp.querySelectorAll("content").forEach(el=>{
@@ -221,15 +221,15 @@ var PageRoute = {
 
             
 
-            PageRoute.onRoutingProgress(url, 1);
+            Router.onRoutingProgress(url, 1);
             setTimeout(()=>{
-                PageRoute.onRoutingSuccess(url);
-                PageRoute.preloadRoutes();
+                Router.onRoutingSuccess(url);
+                Router.preloadRoutes();
             }, 100);
             
         }
 
-        let preloaded = PageRoute._preloaded_routes[url];
+        let preloaded = Router._preloaded_routes[url];
         if(preloaded) {
             if(preloaded==404) {
                 location.href = url;
@@ -237,7 +237,7 @@ var PageRoute = {
                 route_data = preloaded[1];
                 processRoute();
             } else {
-                PageRoute._preloading_callbacks[url]
+                Router._preloading_callbacks[url]
                     = function(res){
                         route_data = res;
                         processRoute();
@@ -251,11 +251,11 @@ var PageRoute = {
                 processRoute();
             }).catch(e=>{
                 console.log("Error loading page: " + e);
-                PageRoute.onRoutingError(url, e);
+                Router.onRoutingError(url, e);
             }))
             .catch(e=>{
                 console.log("Error processing page: " + e);
-                PageRoute.onRoutingError(url, e);
+                Router.onRoutingError(url, e);
             });
         }
         
@@ -264,8 +264,8 @@ var PageRoute = {
     },
 
     toPageRoute: (url, callback = () => {}, thenState = () => {}) => {
-        PageRoute.onRoutingStart(url);
-        PageRoute.onRoutingProgress(url, 0.1);
+        Router.onRoutingStart(url);
+        Router.onRoutingProgress(url, 0.1);
         
         let route_data = null;
 
@@ -290,7 +290,7 @@ var PageRoute = {
 
             let updateProgress = (progress) => {
                 console.log("---- Loaded " + Math.round(progress) + "%");
-                PageRoute.onRoutingProgress(url, progress/100);
+                Router.onRoutingProgress(url, progress/100);
             }
 
             updateProgress(40);
@@ -298,7 +298,7 @@ var PageRoute = {
             let writePage = () => {
                 document.write(temp_page.innerHTML);
                 document.close();
-                PageRoute.onRoutingSuccess(url);
+                Router.onRoutingSuccess(url);
             
                 callback();
                 console.log("DONE!!!");
@@ -416,7 +416,7 @@ var PageRoute = {
 
         };
 
-        let preloaded = PageRoute._preloaded_routes[url];
+        let preloaded = Router._preloaded_routes[url];
         if(preloaded) {
             if(preloaded==404) {
                 location.href = url;
@@ -425,7 +425,7 @@ var PageRoute = {
                 thenState();
                 processRoute();
             } else {
-                PageRoute._preloading_callbacks[url]
+                Router._preloading_callbacks[url]
                     = function(res){
                         route_data = res;
                         thenState();
@@ -440,11 +440,11 @@ var PageRoute = {
                 processRoute();
             }).catch(e=>{
                 console.log("Error loading page: " + e);
-                PageRoute.onRoutingError(url, e);
+                Router.onRoutingError(url, e);
             }))
             .catch(e=>{
                 console.log("Error processing page: " + e);
-                PageRoute.onRoutingError(url, e);
+                Router.onRoutingError(url, e);
             });
         }
 
@@ -470,7 +470,7 @@ var PageRoute = {
         // If route_data was stored:
 
         if(history.state && history.state.route_data && history.state.route_src) {
-            PageRoute._preloaded_routes[history.state.route_src]
+            Router._preloaded_routes[history.state.route_src]
              = [true, history.state.route_data];
         } else links.push(location.href);
 
@@ -480,15 +480,15 @@ var PageRoute = {
         console.log("Preparing " + links.length + " routing links.", links);
 
         links.forEach(link=>{
-            if(!PageRoute._preloaded_routes[link]) {
-                PageRoute._preloaded_routes[link] = [false, ""];
+            if(!Router._preloaded_routes[link]) {
+                Router._preloaded_routes[link] = [false, ""];
                 fetch(link).then(
                     res=> res.status != 404 ? res.text().then(
                         res=>{
-                            PageRoute._preloaded_routes[link] = [true, res];
-                            (PageRoute._preloading_callbacks[link] || function(_){})(res);
+                            Router._preloaded_routes[link] = [true, res];
+                            (Router._preloading_callbacks[link] || function(_){})(res);
                         }
-                    ) : PageRoute._preloaded_routes[link] = 404
+                    ) : Router._preloaded_routes[link] = 404
                 );
             }
         });
@@ -698,10 +698,10 @@ var RouteUtils = {
 window.onpopstate = (event) => {
     if(history.state && history.state.route_mode) {
         if(history.state.route_mode == "content") {
-            PageRoute.toContentRoute(location.href);
+            Router.toContentRoute(location.href);
         }
         else if(history.state.route_mode == "page") { 
-            PageRoute.toPageRoute(location.href);
+            Router.toPageRoute(location.href);
         }
     }
 }
@@ -716,8 +716,8 @@ function configureClicks(element) {
         let closest_sidebar = element.closest(".su-sidebar[visible]");
         if(closest_sidebar && closest_sidebar.hasAttribute("visible")) sidebar(closest_sidebar, false);
         
-        PageRoute.toContentRoute(route_url, ()=>{}, ()=>{
-            PageRoute._current_route_mode = "content";
+        Router.toContentRoute(route_url, ()=>{}, ()=>{
+            Router._current_route_mode = "content";
             if(!history.state) 
                 history.replaceState({route_mode: "content", ...history.state}, "");
 
@@ -733,8 +733,8 @@ function configureClicks(element) {
         
         
 
-        PageRoute.toPageRoute(route_url, ()=>{}, ()=>{
-            PageRoute._current_route_mode = "page";
+        Router.toPageRoute(route_url, ()=>{}, ()=>{
+            Router._current_route_mode = "page";
             
             if(!history.state || !history.state.route_mode) 
                 history.replaceState({route_mode: "content"}, "");
@@ -782,14 +782,14 @@ window.addEventListener("DOMNodeInserted", () => {
 // }
 
 
-//window.addEventListener("DOMContentLoaded", ()=>PageRoute.isWindowReady = true);
+//window.addEventListener("DOMContentLoaded", ()=>Router.isWindowReady = true);
 window.hasContentHandler = true;
 
 window.hasSleeveContent = true;
 history.scrollRestoration = "manual";
 
 document.onsuitload = () => {
-    setTimeout(PageRoute.preloadRoutes, 100);
+    setTimeout(Router.preloadRoutes, 100);
 }
 
 

@@ -1,4 +1,4 @@
-PageRoute.onRoutingStart = (url) => {
+Router.onRoutingStart = (url) => {
     let _route_loader = document.createElement("div");
     _route_loader.id = "_route_loader";
     _route_loader.setAttribute("style", `
@@ -13,11 +13,11 @@ PageRoute.onRoutingStart = (url) => {
     `);
     document.body.appendChild(_route_loader);
 }
-PageRoute.onRoutingProgress = (url, progress) => {
+Router.onRoutingProgress = (url, progress) => {
     let _route_loader = document.querySelector("#_route_loader");
     if(_route_loader) _route_loader.style.width = (progress*100) + "%";
 }
-PageRoute.onRoutingSuccess = (url) => {
+Router.onRoutingSuccess = (url) => {
     let _route_loader = document.querySelector("#_route_loader");
     if(_route_loader && _route_loader.parentElement) 
         _route_loader.parentElement.removeChild(_route_loader);
